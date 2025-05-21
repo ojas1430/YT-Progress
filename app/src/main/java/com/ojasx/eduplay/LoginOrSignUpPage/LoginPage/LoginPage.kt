@@ -1,5 +1,6 @@
 package com.ojasx.eduplay.LoginOrSignUpPage.LoginPage
 
+import LoginForm
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,14 +18,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.ojasx.eduplay.R
 
 
 
 
-@Preview(showBackground = true)
 @Composable
-fun CurvedLoginBackground() {
+fun LoginPage(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -58,11 +59,8 @@ fun CurvedLoginBackground() {
             // Place your Login UI here if needed
             Column(modifier = Modifier.fillMaxSize()) {
                 LoginPic()
-                LoginForm()
+                LoginForm(navController)
             }
         }
     }
 }
-
-
-

@@ -38,10 +38,16 @@ fun LottieAnimationButton(onClick: () -> Unit) {
         iterations = LottieConstants.IterateForever
     )
 
-    LottieAnimation(
-        composition = composition,
-        progress = { progress },
-        modifier = Modifier.clickable { onClick() }
-            .size(150.dp)
-    )
+    // Ensure Lottie is loaded before showing animation
+    if (composition != null) {
+        LottieAnimation(
+            composition = composition,
+            progress = { progress },
+            modifier = Modifier
+                .size(150.dp)
+                .clickable { onClick(
+
+                ) }
+        )
+    }
 }

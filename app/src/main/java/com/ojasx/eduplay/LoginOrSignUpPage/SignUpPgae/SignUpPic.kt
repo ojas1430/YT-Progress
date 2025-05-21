@@ -17,12 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ojasx.eduplay.LoginOrSignUpPage.LoginPage.LoginForm
 import com.ojasx.eduplay.LoginOrSignUpPage.LoginPage.LoginPic
 import com.ojasx.eduplay.R
 
 @Composable
-fun SignUpPic(modifier: Modifier = Modifier) {
+fun SignUpPic() {
     Box(
         modifier = Modifier
             .fillMaxWidth()

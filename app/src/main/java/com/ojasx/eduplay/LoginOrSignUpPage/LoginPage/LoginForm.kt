@@ -1,5 +1,3 @@
-package com.ojasx.eduplay.LoginOrSignUpPage.LoginPage
-
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,14 +37,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ojasx.eduplay.LoginOrSignUpPage.LoginPage.LoginPic
 import com.ojasx.eduplay.R
+import androidx.compose.runtime.livedata.observeAsState
+import com.ojasx.eduplay.AuthViewModel
 
 
 @Composable
-fun LoginForm() {
+fun LoginForm(navController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+
 
     Column(
         modifier = Modifier
@@ -130,7 +133,9 @@ fun LoginForm() {
 
         Spacer(Modifier.height(15.dp))
         TextButton(
-            onClick = {},
+            onClick = {
+                navController.navigate("SignUpScreen")
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally)

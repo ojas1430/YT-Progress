@@ -1,5 +1,6 @@
 package com.ojasx.eduplay.MainScreen
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,21 +21,26 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavController
 import com.airbnb.lottie.compose.*
 import com.ojasx.eduplay.R
 
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavController) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
 
         DottedBackground()
         ColumnArrangements()
+        MainScreenButton(navController)
         AnimationArrangement()
     }
 }
@@ -62,5 +68,35 @@ fun AnimationArrangement(){
                 onClick = {}
             )
         }
+    }
+}
+
+@Composable
+fun MainScreenButton(navController: NavController) {
+    Box(modifier = Modifier.fillMaxSize()){
+        Box(modifier = Modifier.align(Alignment.BottomCenter)){
+
+    Button(
+        onClick = {
+            navController.navigate("LoginScreen")
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Black,
+            contentColor = Color(0xFF87CEEB)
+        ),
+        shape = RoundedCornerShape(15.dp)
+    ) {
+        Text(
+            text = "Lets Start",
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+
+        )
+    }
+
+}
     }
 }
