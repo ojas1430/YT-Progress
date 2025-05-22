@@ -62,7 +62,7 @@ fun SignUpPage(navController: NavController) {
             ) {
                 SignUpPic()
                 SignUpForm(navController = navController, authViewModel = authViewModel)
-                GoogleButton()
+                GoogleButton(navController)
             }
         }
     }

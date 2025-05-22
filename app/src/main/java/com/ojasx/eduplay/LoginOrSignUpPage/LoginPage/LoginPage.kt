@@ -61,7 +61,7 @@ fun LoginPage(navController: NavController) {
             Column(modifier = Modifier.fillMaxSize()) {
                 LoginPic()
                 LoginForm(navController)
-                GoogleButton()
+                GoogleButton(navController)
             }
         }
     }

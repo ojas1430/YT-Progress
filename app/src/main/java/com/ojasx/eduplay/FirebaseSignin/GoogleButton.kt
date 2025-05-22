@@ -27,12 +27,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ojasx.eduplay.R
 
 
-@Preview
+
 @Composable
-fun GoogleButton(modifier: Modifier = Modifier) {
+fun GoogleButton(navController: NavController) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val launcher =
@@ -48,7 +49,7 @@ fun GoogleButton(modifier: Modifier = Modifier) {
 
         }
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Box(
             modifier = Modifier
@@ -73,8 +74,10 @@ fun GoogleButton(modifier: Modifier = Modifier) {
                             login = {
                                 Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT)
                                     .show()
+                                navController.navigate("Home")
                             }
                         )
+
                     },
                     modifier = Modifier.size(45.dp)
                 ) {
