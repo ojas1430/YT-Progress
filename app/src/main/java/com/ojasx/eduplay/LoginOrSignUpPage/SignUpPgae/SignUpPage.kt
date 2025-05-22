@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ojasx.eduplay.AuthViewModel
+import com.ojasx.eduplay.FirebaseSignin.GoogleButton
 import com.ojasx.eduplay.LoginOrSignUpPage.LoginPage.LoginPic
 import com.ojasx.eduplay.R
 
@@ -61,7 +62,7 @@ fun SignUpPage(navController: NavController) {
             ) {
                 SignUpPic()
                 SignUpForm(navController = navController, authViewModel = authViewModel)
-
+                GoogleButton()
             }
         }
     }

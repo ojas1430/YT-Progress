@@ -227,6 +227,7 @@ fun SignUpForm(navController: NavController,authViewModel: AuthViewModel) {
             )
         }
 
+
     }
 
 }

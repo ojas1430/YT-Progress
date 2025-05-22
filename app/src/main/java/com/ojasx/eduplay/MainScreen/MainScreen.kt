@@ -1,5 +1,6 @@
 package com.ojasx.eduplay.MainScreen
 
+import android.R.attr.bottom
 import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -85,7 +86,7 @@ fun MainScreenButton(navController: NavController) {
             .padding(20.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Black,
-            contentColor = Color(0xFF87CEEB)
+            contentColor = Color(0xFFBA55D3)
         ),
         shape = RoundedCornerShape(15.dp)
     ) {
@@ -93,6 +94,7 @@ fun MainScreenButton(navController: NavController) {
             text = "Lets Start",
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp
+            ,modifier = Modifier.padding(bottom = 33.dp)
 
         )
     }

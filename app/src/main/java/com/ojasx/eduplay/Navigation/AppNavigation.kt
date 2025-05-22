@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ojasx.eduplay.HomePage
 import com.ojasx.eduplay.LoginOrSignUpPage.LoginPage.LoginPage
 import com.ojasx.eduplay.LoginOrSignUpPage.SignUpPgae.SignUpPage
 import com.ojasx.eduplay.MainScreen.MainScreen
@@ -27,7 +28,9 @@ fun AppNavigation() {
         composable("SignUpScreen") {
             SignUpPage(navController)
         }
-
+        composable("Home") {
+            HomePage(navController)
+        }
 
     }
 }
