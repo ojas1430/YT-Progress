@@ -14,16 +14,19 @@ class AuthViewModel : ViewModel() {
     val authState : LiveData<AuthState> = _authState
 
     init{
-        checkAuthStatus()
+        // checkAuthStatus()
+        _authState.value = AuthState.Unauthenticated
     }
 
-    fun checkAuthStatus(){
-        if(auth.currentUser == null){
-            _authState.value = AuthState.Unauthenticated
-        }else{
-            _authState.value = AuthState.Authenticated
-        }
-    }
+    // This code is to automatically move to home page if user is authenticaed
+
+//    fun checkAuthStatus(){
+//        if(auth.currentUser == null){
+//            _authState.value = AuthState.Unauthenticated
+//        }else{
+//            _authState.value = AuthState.Authenticated
+//        }
+//    }
 
     fun login(email:String, password:String){
         if(email.isEmpty() || password.isEmpty()){
