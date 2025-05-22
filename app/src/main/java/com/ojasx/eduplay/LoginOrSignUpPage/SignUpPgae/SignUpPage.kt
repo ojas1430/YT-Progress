@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ojasx.eduplay.AuthViewModel
 import com.ojasx.eduplay.LoginOrSignUpPage.LoginPage.LoginPic
@@ -25,6 +26,7 @@ import com.ojasx.eduplay.R
 
 @Composable
 fun SignUpPage(navController: NavController) {
+    val authViewModel: AuthViewModel = viewModel()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -58,7 +60,8 @@ fun SignUpPage(navController: NavController) {
             Column(modifier = Modifier.fillMaxSize()
             ) {
                 SignUpPic()
-                SignUpForm(navController,AuthViewModel())
+                SignUpForm(navController = navController, authViewModel = authViewModel)
+
             }
         }
     }
