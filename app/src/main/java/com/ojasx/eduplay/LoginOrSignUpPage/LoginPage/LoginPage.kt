@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.ojasx.eduplay.FirebaseSignin.GoogleButton
 import com.ojasx.eduplay.R
 
 
@@ -60,6 +61,7 @@ fun LoginPage(navController: NavController) {
             Column(modifier = Modifier.fillMaxSize()) {
                 LoginPic()
                 LoginForm(navController)
+                GoogleButton()
             }
         }
     }
