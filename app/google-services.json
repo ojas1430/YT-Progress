@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "927162964914",
+    "project_id": "ytprogress-6bde6",
+    "storage_bucket": "ytprogress-6bde6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927162964914:android:a96d740de2e83a199762ab",
+        "android_client_info": {
+          "package_name": "com.ojasx.eduplay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927162964914-lkm802jcpdkoctfj03b7fljpf5038ski.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ojasx.eduplay",
+            "certificate_hash": "ebfec33c452e5ebc777ec7fafadf1827206aef29"
+          }
+        },
+        {
+          "client_id": "927162964914-ae3ldh7jmg4bu4526jdnst4133qmpekk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaRUUiVBa_c69ElCv8WreIZlC6hd8Twxc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927162964914-ae3ldh7jmg4bu4526jdnst4133qmpekk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
