@@ -7,8 +7,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ojasx.eduplay.API.PlaylistScreen
 import com.ojasx.eduplay.API.PlaylistViewModel
+import com.ojasx.eduplay.BottomBar.BottomBar
+import com.ojasx.eduplay.BottomBar.Screens.PlaylistScreen
+import com.ojasx.eduplay.BottomBar.Screens.SettingsScreen
 import com.ojasx.eduplay.HomePage
 import com.ojasx.eduplay.LoginOrSignUpPage.LoginPage.LoginPage
 import com.ojasx.eduplay.LoginOrSignUpPage.SignUpPgae.SignUpPage
@@ -18,11 +20,14 @@ import kotlinx.coroutines.flow.combine
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    val viewModel : PlaylistViewModel = viewModel()
+    val playlistviewModel : PlaylistViewModel = viewModel()
     NavHost(
         navController = navController,
-        startDestination = "MainScreen"
+        startDestination = "BottomBar"
     ) {
+        composable("BottomBar"){
+            BottomBar(playlistviewModel,navController)
+        }
         composable("MainScreen") {
             MainScreen(navController)
         }
@@ -33,11 +38,14 @@ fun AppNavigation() {
             SignUpPage(navController)
         }
         composable("Home") {
-            HomePage(navController)
+            HomePage(navController,playlistviewModel)
         }
 
         composable("PlaylistScreen"){
-            PlaylistScreen(viewModel)
+            PlaylistScreen(playlistviewModel,navController)
+        }
+        composable("SettingsScreen"){
+            SettingsScreen(navController)
         }
     }
 }
