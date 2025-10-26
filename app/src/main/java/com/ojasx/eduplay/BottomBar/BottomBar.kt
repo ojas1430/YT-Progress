@@ -19,15 +19,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.google.android.play.integrity.internal.s
+import com.ojasx.eduplay.API.PlaylistViewModel
 import com.ojasx.eduplay.BottomBar.Screens.HomeScreen
 import com.ojasx.eduplay.BottomBar.Screens.PlaylistScreen
 import com.ojasx.eduplay.BottomBar.Screens.SettingsScreen
 import com.ojasx.eduplay.R
 
-@Preview
 @Composable
-fun BottomBar() {
+fun BottomBar(
+    playlistViewModel: PlaylistViewModel,
+    navController: NavController
+) {
 
     val navItemList = listOf(
         NavItem("Home",Icons.Default.Home),
@@ -59,15 +63,25 @@ fun BottomBar() {
             }
         }
         ) { innerPadding ->
-        ContentScreen(modifier = Modifier.padding(innerPadding))
+        ContentScreen(
+            modifier = Modifier.padding(innerPadding),
+            navController = navController,
+            playlistViewModel = playlistViewModel,
+            selectedIndex = selectedIndex
+        )
     }
 }
 
 @Composable
-fun ContentScreen(modifier: Modifier = Modifier, selectedIndex : Int = 0) {
+fun ContentScreen(modifier: Modifier,
+                  navController: NavController,
+                  playlistViewModel: PlaylistViewModel,
+                  selectedIndex : Int = 0,
+
+) {
         when(selectedIndex){
-            0 -> HomeScreen()
-            1 -> PlaylistScreen()
-            2 -> SettingsScreen()
+            0 -> HomeScreen(navController,playlistViewModel)
+            1 -> PlaylistScreen(playlistViewModel,navController)
+            2 -> SettingsScreen(navController)
         }
 }
