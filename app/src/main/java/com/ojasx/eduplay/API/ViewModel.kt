@@ -17,10 +17,6 @@ class PlaylistViewModel(private val repository: YouTubeRepository = YouTubeRepos
         val link = playlistLink.value.trim()
         val playlistId = extractPlaylistId(link)
 
-        Log.d("PlaylistVM", "=== Fetch Playlist Request ===")
-        Log.d("PlaylistVM", "Original link: $link")
-        Log.d("PlaylistVM", "Extracted playlist ID: $playlistId")
-
         if (playlistId.isNullOrEmpty()) {
             errorMessage.value = "Invalid playlist link"
             Log.e("PlaylistVM", "Invalid playlist link - playlistId is null or empty")
@@ -37,21 +33,16 @@ class PlaylistViewModel(private val repository: YouTubeRepository = YouTubeRepos
             return
         }
 
-        Log.d("PlaylistVM", "API Key: ${apiKey.take(10)}...${apiKey.takeLast(5)}")
-        Log.d("PlaylistVM", "API Key length: ${apiKey.length}")
-
         errorMessage.value = null
         isLoading.value = true
 
         viewModelScope.launch {
             try {
-                Log.d("PlaylistVM", "Launching coroutine to fetch playlist...")
                 val response = repository.getPlaylistVideos(playlistId, apiKey)
 
                 if (response != null) {
                     val items = response.items ?: emptyList()
                     playlistItems.value = items
-                    Log.d("PlaylistVM", "Successfully loaded ${items.size} items")
 
                     if (items.isEmpty()) {
                         errorMessage.value = "Playlist is empty or private"
@@ -75,10 +66,9 @@ class PlaylistViewModel(private val repository: YouTubeRepository = YouTubeRepos
     private fun extractPlaylistId(url: String): String? {
         Log.d("PlaylistVM", "Extracting playlist ID from: $url")
 
-        // Try multiple patterns to handle different URL formats
         val patterns = listOf(
-            "list=([a-zA-Z0-9_-]+)",           // Standard: ?list=...
-            "&list=([a-zA-Z0-9_-]+)",          // With other params: &list=...
+            "list=([a-zA-Z0-9_-]+)",
+            "&list=([a-zA-Z0-9_-]+)",
         )
 
         for (pattern in patterns) {
