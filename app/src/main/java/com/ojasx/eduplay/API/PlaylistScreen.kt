@@ -15,72 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 
 @Composable
-fun PlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
-    var link by remember { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        TextField(
-            value = link,
-            onValueChange = {
-                link = it
-                viewModel.playlistLink.value = it
-            },
-            label = { Text("Enter YouTube Playlist URL") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
-            placeholder = { Text("https://www.youtube.com/playlist?list=...") }
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(
-            onClick = {
-                viewModel.fetchPlaylistVideos()
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !viewModel.isLoading.value
-        ) {
-            if (viewModel.isLoading.value) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(20.dp),
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Loading...")
-            } else {
-                Text("Fetch Playlist")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        viewModel.errorMessage.value?.let { error ->
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer
-                )
-            ) {
-                Text(
-                    text = error,
-                    color = MaterialTheme.colorScheme.onErrorContainer,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-        }
-
-        if (viewModel.playlistItems.value.isNotEmpty()) {
-            Text(
-                text = "Found ${viewModel.playlistItems.value.size} videos",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
-        }
+fun LinkPlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
 
         val playlistItems by remember { derivedStateOf { viewModel.playlistItems.value } }
         LazyColumn {
@@ -89,7 +24,7 @@ fun PlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
             }
         }
     }
-}
+
 
 @Composable
 fun PlaylistItemCard(item: PlaylistItem) {
@@ -122,11 +57,4 @@ fun PlaylistItemCard(item: PlaylistItem) {
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-// playlist
-fun PlaylistScreenPreview() {
-    PlaylistScreen()
 }
