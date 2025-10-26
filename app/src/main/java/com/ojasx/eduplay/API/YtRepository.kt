@@ -12,27 +12,14 @@ class YouTubeRepository {
         pageToken: String? = null
     ): YouTubePlaylistResponse? {
         return try {
-            Log.d("YouTubeRepo", "=== Starting API Request ===")
-            Log.d("YouTubeRepo", "Playlist ID: $playlistId")
-            Log.d("YouTubeRepo", "API Key: ${apiKey.take(10)}...${apiKey.takeLast(5)}")
-            Log.d("YouTubeRepo", "API Key length: ${apiKey.length}")
-            Log.d("YouTubeRepo", "Page Token: $pageToken")
 
             val requestUrl = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=$playlistId&key=${apiKey.take(10)}..."
-            Log.d("YouTubeRepo", "Request URL: $requestUrl")
 
-            Log.d("YouTubeRepo", "Making API call...")
             val response = api.getPlaylistItems(
                 playlistId = playlistId,
                 apiKey = apiKey,
                 pageToken = pageToken
             ).await()
-
-            Log.d("YouTubeRepo", "=== API Response Received ===")
-            Log.d("YouTubeRepo", "Response is not null: ${response != null}")
-            Log.d("YouTubeRepo", "Items count: ${response.items?.size ?: 0}")
-            Log.d("YouTubeRepo", "Next page token: ${response.nextPageToken}")
-            Log.d("YouTubeRepo", "Previous page token: ${response.prevPageToken}")
 
             if (response.items != null && response.items.isNotEmpty()) {
                 Log.d("YouTubeRepo", "First item title: ${response.items[0].snippet.title}")
@@ -40,10 +27,6 @@ class YouTubeRepository {
 
             response
         } catch (e: Exception) {
-            Log.e("YouTubeRepo", "=== API Error Occurred ===")
-            Log.e("YouTubeRepo", "Exception type: ${e.javaClass.simpleName}")
-            Log.e("YouTubeRepo", "Error message: ${e.message}")
-            Log.e("YouTubeRepo", "Stack trace:", e)
 
             // Check for specific HTTP error codes
             val errorMessage = e.message ?: ""
