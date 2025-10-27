@@ -9,7 +9,11 @@ data class YouTubePlaylistResponse(
 )
 
 data class PlaylistItem(
-    val snippet: Snippet
+    val snippet: Snippet,
+    var isCompleted : Boolean = false,
+    var hasNotes : Boolean = false,
+    var needsRevision : Boolean = false,
+    var isPinned: Boolean = false
 )
 
 data class Snippet(
