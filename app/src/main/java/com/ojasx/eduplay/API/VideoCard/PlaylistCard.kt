@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -105,7 +106,12 @@ fun PlaylistItemCard(
                     ) {
                         Checkbox(
                             checked = item.isCompleted,
-                            onCheckedChange = onCheckedChange
+                            onCheckedChange = onCheckedChange,
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = Color(0xFF4CAF50),
+                                uncheckedColor = Color.Gray,
+                                checkmarkColor = Color.White
+                            )
                         )
                         Spacer(Modifier.width(4.dp))
                         Text(
