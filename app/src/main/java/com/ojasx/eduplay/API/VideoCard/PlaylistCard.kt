@@ -48,7 +48,7 @@ fun PlaylistItemCard(
             .padding(horizontal = 12.dp, vertical = 8.dp),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(0.3f)
+            containerColor = Color(0xFFFFF0E8)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
@@ -84,8 +84,10 @@ fun PlaylistItemCard(
             Text(
                 text = item.snippet.title,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
             )
+
 
             Spacer(modifier = Modifier.height(4.dp))
 
