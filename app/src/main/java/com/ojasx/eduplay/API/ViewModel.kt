@@ -7,7 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.ojasx.eduplay.BuildConfig
 import kotlinx.coroutines.launch
 
-class PlaylistViewModel(private val repository: YouTubeRepository = YouTubeRepository()) : ViewModel() {
+class PlaylistViewModel(
+    private val repository: YouTubeRepository = YouTubeRepository()
+) : ViewModel() {
+
     var playlistLink = mutableStateOf("")
     var playlistItems = mutableStateOf<List<PlaylistItem>>(emptyList())
     var errorMessage = mutableStateOf<String?>(null)
@@ -25,11 +28,9 @@ class PlaylistViewModel(private val repository: YouTubeRepository = YouTubeRepos
 
         val apiKey = BuildConfig.YOUTUBE_API_KEY
 
-        // Check if API key is valid
         if (apiKey.isNullOrEmpty() || apiKey == "null" || apiKey == "YOUR_API_KEY") {
             errorMessage.value = "API Key not configured. Please check your local.properties file."
             Log.e("PlaylistVM", "API Key is null or not set properly")
-            Log.e("PlaylistVM", "API Key value: $apiKey")
             return
         }
 
@@ -38,21 +39,17 @@ class PlaylistViewModel(private val repository: YouTubeRepository = YouTubeRepos
 
         viewModelScope.launch {
             try {
-                val response = repository.getPlaylistVideos(playlistId, apiKey)
+                //  Automatically fetch ALL videos using pagination
+                val allVideos = repository.getAllPlaylistVideos(playlistId, apiKey)
 
-                if (response != null) {
-                    val items = response.items ?: emptyList()
-                    playlistItems.value = items
+                playlistItems.value = allVideos
 
-                    if (items.isEmpty()) {
-                        errorMessage.value = "Playlist is empty or private"
-                        Log.w("PlaylistVM", "Playlist returned empty items list")
-                    } else {
-                        Log.d("PlaylistVM", "First video title: ${items[0].snippet.title}")
-                    }
+                if (allVideos.isEmpty()) {
+                    errorMessage.value = "Playlist is empty or private"
+                    Log.w("PlaylistVM", "Playlist returned empty items list")
                 } else {
-                    errorMessage.value = "Failed to fetch playlist. Check Logcat for details."
-                    Log.e("PlaylistVM", "Response was null - API call failed")
+                    Log.d("PlaylistVM", " Total videos loaded: ${allVideos.size}")
+                    Log.d("PlaylistVM", "First video: ${allVideos[0].snippet.title}")
                 }
             } catch (e: Exception) {
                 errorMessage.value = "Error: ${e.message}"
@@ -89,5 +86,15 @@ class PlaylistViewModel(private val repository: YouTubeRepository = YouTubeRepos
 
         Log.e("PlaylistVM", "Could not extract playlist ID from: $url")
         return null
+    }
+
+    // Checkbox toggle logic
+    fun toggleCompleted(item: PlaylistItem, checked: Boolean) {
+        val updatedList = playlistItems.value.map {
+            if (it.snippet.resourceId?.videoId == item.snippet.resourceId?.videoId) {
+                it.copy(isCompleted = checked)
+            } else it
+        }
+        playlistItems.value = updatedList
     }
 }
