@@ -32,7 +32,15 @@ fun PlaylistScreen(
             LinkPlaylistScreen(playlistviewModel)
 
             Spacer(modifier = Modifier.height(12.dp))
-
         }
+
+        PagerButtons(
+            currentPage = playlistviewModel.currentPage.value,
+            totalPages = playlistviewModel.totalPages.value,
+            onPageChange = { page ->
+                playlistviewModel.onPageChange(page)
+            }
+        )
+
     }
 }
