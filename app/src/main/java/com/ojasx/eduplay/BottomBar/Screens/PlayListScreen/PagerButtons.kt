@@ -24,7 +24,7 @@ fun PagerButtons(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFF121212))
+         //   .background(Color(0xFF9C27B0))
             .padding(vertical = 16.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -53,7 +53,7 @@ fun PagerButtons(
             pagesToShow.forEach { page ->
                 Spacer(Modifier.width(4.dp))
                 when (page) {
-                    -1 -> Text("...", color = Color.Gray, fontSize = 16.sp)
+                    -1 -> Text("...", color = Color.White, fontSize = 16.sp)
                     else -> PageButton(
                         text = page.toString(),
                         selected = page == currentPage
@@ -79,13 +79,13 @@ fun PageButton(
     onClick: () -> Unit
 ) {
     val bgColor = when {
-        selected -> Color(0xFF2196F3)
+        selected -> Color(0xFF2A2A72)
         else -> Color.Transparent
     }
 
     val borderColor = when {
-        selected -> Color(0xFF2196F3)
-        else -> Color.Gray.copy(alpha = 0.5f)
+        selected -> Color(0xFF2A2A72)
+        else -> Color.White
     }
 
     Box(
@@ -98,7 +98,7 @@ fun PageButton(
     ) {
         Text(
             text = text,
-            color = if (enabled) Color.White else Color.Gray,
+            color = if (enabled) Color.White else Color.White,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
             fontSize = 15.sp
         )
