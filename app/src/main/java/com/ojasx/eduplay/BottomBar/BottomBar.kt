@@ -17,21 +17,19 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import com.google.android.play.integrity.internal.s
 import com.ojasx.eduplay.API.PlaylistViewModel
 import com.ojasx.eduplay.BottomBar.Screens.HomeScreen
-import com.ojasx.eduplay.BottomBar.Screens.PlaylistScreen
+import com.ojasx.eduplay.BottomBar.Screens.PlayListScreen.PlaylistScreen
 import com.ojasx.eduplay.BottomBar.Screens.SettingsScreen
-import com.ojasx.eduplay.R
+import com.ojasx.eduplay.StatusBar
 
 @Composable
 fun BottomBar(
     playlistViewModel: PlaylistViewModel,
     navController: NavController
 ) {
+    StatusBar()
 
     val navItemList = listOf(
         NavItem("Home",Icons.Default.Home),

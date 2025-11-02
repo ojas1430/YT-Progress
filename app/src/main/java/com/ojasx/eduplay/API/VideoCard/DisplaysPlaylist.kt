@@ -21,10 +21,10 @@ import com.ojasx.eduplay.API.PlaylistViewModel
 @Composable
 fun LinkPlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
 
-        val playlistItems by remember { derivedStateOf { viewModel.playlistItems.value } }
+    val playlistItems by remember { derivedStateOf { viewModel.playlistItems.value } }
 
-        // Sort pinned videos on top
-        val sortedList = playlistItems.sortedByDescending { it.isPinned }
+    // Sort pinned videos on top
+    val sortedList = playlistItems.sortedByDescending { it.isPinned }
 
     LazyColumn {
         items(sortedList) { item ->

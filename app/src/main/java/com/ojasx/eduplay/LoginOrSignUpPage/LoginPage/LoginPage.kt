@@ -22,9 +22,6 @@ import androidx.navigation.NavController
 import com.ojasx.eduplay.FirebaseSignin.GoogleButton
 import com.ojasx.eduplay.R
 
-
-
-
 @Composable
 fun LoginPage(navController: NavController) {
     Box(
