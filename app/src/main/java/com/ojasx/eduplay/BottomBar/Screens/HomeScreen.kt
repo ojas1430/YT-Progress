@@ -38,7 +38,6 @@ fun HomeScreen(
     ) {
         SoftBlurBackground()
         Column {
-            Text("Hello from HomeScreen!", color = Color.Black)
             LinkInputScreen(playlistviewmodel)
         }
     }

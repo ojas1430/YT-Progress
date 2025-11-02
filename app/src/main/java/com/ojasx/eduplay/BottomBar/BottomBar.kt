@@ -23,6 +23,7 @@ import com.ojasx.eduplay.BottomBar.Screens.HomeScreen
 import com.ojasx.eduplay.BottomBar.Screens.PlayListScreen.PlaylistScreen
 import com.ojasx.eduplay.BottomBar.Screens.SettingsScreen
 import com.ojasx.eduplay.StatusBar
+import com.ojasx.eduplay.ui.theme.bodycolor
 
 @Composable
 fun BottomBar(
@@ -50,7 +51,10 @@ fun BottomBar(
                             selectedIndex = index
                         },
                         icon = {
-                            Icon(imageVector = navItem.icon, contentDescription = navItem.label)
+                            Icon(imageVector = navItem.icon,
+                                contentDescription = navItem.label,
+                                tint = bodycolor
+                                )
                         },
                         label = {
                             Text(text = navItem.label)

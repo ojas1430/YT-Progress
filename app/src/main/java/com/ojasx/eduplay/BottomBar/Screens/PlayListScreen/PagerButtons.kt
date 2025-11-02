@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ojasx.eduplay.ui.theme.bodycolor
 
 @Composable
 fun PagerButtons(
@@ -24,15 +25,14 @@ fun PagerButtons(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-         //   .background(Color(0xFF9C27B0))
-            .padding(vertical = 16.dp),
+            .padding(vertical = 6.dp),
         contentAlignment = Alignment.Center
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // ◀️ Previous
+            //  Previous
             PageButton("<", enabled = currentPage > 1) {
                 if (currentPage > 1) onPageChange(currentPage - 1)
             }
@@ -79,18 +79,18 @@ fun PageButton(
     onClick: () -> Unit
 ) {
     val bgColor = when {
-        selected -> Color(0xFF2A2A72)
+        selected -> bodycolor
         else -> Color.Transparent
     }
 
     val borderColor = when {
-        selected -> Color(0xFF2A2A72)
+        selected -> bodycolor
         else -> Color.White
     }
 
     Box(
         modifier = Modifier
-            .size(40.dp)
+            .size(30.dp)
             .border(1.dp, borderColor, RoundedCornerShape(8.dp))
             .background(bgColor, RoundedCornerShape(8.dp))
             .clickable(enabled = enabled) { onClick() },

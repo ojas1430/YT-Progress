@@ -30,6 +30,6 @@ fun SoftBlurBackground() {
                     )
                 )
             )
-            .blur(60.dp)
+            .blur(90.dp)
     )
 }

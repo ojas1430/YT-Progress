@@ -2,6 +2,7 @@ package com.ojasx.eduplay.BottomBar.Screens.PlayListScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,19 +17,19 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun MyPlaylistBanner() {
-
-        Column(
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier.padding(8.dp)
-        ) {
-            Text(
-                text = "My Playlists",
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                ),
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
-        }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "My Playlists ▶️",
+            style = MaterialTheme.typography.headlineSmall.copy(
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            ),
+            textAlign = TextAlign.Center
+        )
     }
+}
