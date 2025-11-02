@@ -1,44 +1,34 @@
 package com.ojasx.eduplay.BottomBar.Screens.PlayListScreen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.ojasx.eduplay.R
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun MyPlaylistBanner() {
 
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.dp
-    val bannerHeight = screenHeight * 0.06f
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(bannerHeight)
-            .padding(bottom = 8.dp)
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(Color(0xFF777C6D),Color(0xFFB7B89F))
-                )
+        Column(
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Text(
+                text = "My Playlists",
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                ),
+                modifier = Modifier.padding(bottom = 16.dp)
             )
-    ) {
-        Image(
-            painter = painterResource(R.drawable.myytplaylist),
-            contentDescription = "",
-            modifier = Modifier.align(Alignment.CenterStart)
-        )
+
+        }
     }
-}
