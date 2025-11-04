@@ -1,12 +1,15 @@
 package com.ojasx.eduplay.API
 
 import android.util.Log
+import com.ojasx.eduplay.DataBase.PlaylistDao
+import com.ojasx.eduplay.DataBase.PlaylistEntity
 import retrofit2.await
 
-class YouTubeRepository {
+class YouTubeRepository(
+    private val dao: PlaylistDao? = null  // optional if no DB provided
+) {
     private val api = RetrofitClient.apiService
 
-    // Fetch only one page of videos at a time
     suspend fun getPlaylistVideosPage(
         playlistId: String,
         apiKey: String,
@@ -19,11 +22,31 @@ class YouTubeRepository {
                 pageToken = pageToken
             ).await()
 
+            // Save API data to Room if available
+            response?.items?.let { items ->
+                val entities = items.mapNotNull { it.toEntity() }
+                dao?.insertAll(entities)
+            }
+
             response
         } catch (e: Exception) {
             Log.e("YouTubeRepo", "Error fetching playlist page: ${e.message}", e)
-            null
+            // Load cached videos if API fails
+            val cached = dao?.getAllVideos()
+            if (cached != null && cached.isNotEmpty()) {
+                YouTubePlaylistResponse(
+                    items = cached.map { it.toPlaylistItem() },
+                    nextPageToken = null,
+                    prevPageToken = null
+                )
+            } else null
         }
     }
 
+    suspend fun getCachedVideos() : List<PlaylistEntity>{
+        return dao?.getAllVideos()?:emptyList()
+    }
+    suspend fun clearCache() {
+        dao?.clearAll()
+    }
 }
