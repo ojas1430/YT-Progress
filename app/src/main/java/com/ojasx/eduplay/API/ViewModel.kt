@@ -1,16 +1,26 @@
 package com.ojasx.eduplay.API
 
+import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.Room
 import com.ojasx.eduplay.BuildConfig
+import com.ojasx.eduplay.DataBase.AppDatabase
 import kotlinx.coroutines.launch
 
-class PlaylistViewModel(
-    private val repository: YouTubeRepository = YouTubeRepository()
-) : ViewModel() {
+class PlaylistViewModel(application: Application) : AndroidViewModel(application) {
 
+    //Room database instance
+    private val db = Room.databaseBuilder(
+        application,
+        AppDatabase::class.java,
+        "playlist_db"
+    ).build()
+
+    private val repository = YouTubeRepository(db.playlistDao())
     var playlistLink = mutableStateOf("")
     var playlistItems = mutableStateOf<List<PlaylistItem>>(emptyList())
     var errorMessage = mutableStateOf<String?>(null)
@@ -23,6 +33,11 @@ class PlaylistViewModel(
     private var prevPageToken: String? = null
     private var pageTokens = mutableListOf<String?>(null) // store tokens by page index
     private var playlistId: String? = null
+
+    init {
+        loadCachedVideos()
+    }
+
 
     fun fetchPlaylistVideos(initial: Boolean = true, pageToken: String? = null) {
         val id = if (initial) extractPlaylistId(playlistLink.value.trim()) else playlistId
@@ -79,4 +94,14 @@ class PlaylistViewModel(
             it.matches(Regex("^[a-zA-Z0-9_-]+$"))
         }
     }
+
+    private fun loadCachedVideos() {
+        viewModelScope.launch {
+            val cached = repository.getCachedVideos()
+            if (cached.isNotEmpty()) {
+                playlistItems.value = cached.map { it.toPlaylistItem() }
+            }
+        }
+    }
+
 }
