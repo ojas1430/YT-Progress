@@ -11,7 +11,7 @@ fun PlaylistItem.toEntity(): PlaylistEntity? {
         description = snippet.description,
         thumbnailUrl = snippet.thumbnails?.medium?.url,
         isCompleted = isCompleted,
-        hasNotes = hasNotes,
+        note = note,
         needsRevision = needsRevision,
         isPinned = isPinned
     )
@@ -24,5 +24,5 @@ fun PlaylistEntity.toPlaylistItem(): PlaylistItem {
         thumbnails = null,
         resourceId = ResourceId(videoId)
     )
-    return PlaylistItem(snippet, isCompleted, hasNotes, needsRevision, isPinned)
+    return PlaylistItem(snippet, isCompleted, note, needsRevision, isPinned)
 }

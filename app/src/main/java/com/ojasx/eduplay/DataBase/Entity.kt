@@ -11,7 +11,7 @@ data class PlaylistEntity(
     val description: String?,
     val thumbnailUrl: String?,
     val isCompleted: Boolean = false,
-    val hasNotes: Boolean = false,
+    val note: String? = null,
     val needsRevision: Boolean = false,
     val isPinned: Boolean = false
 )
