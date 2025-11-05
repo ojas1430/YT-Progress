@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Refresh
@@ -25,8 +26,16 @@ fun LinkPlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
 
     // Sort pinned videos on top
     val sortedList = playlistItems.sortedByDescending { it.isPinned }
+    val currentPage by viewModel.currentPage
+    val listState = rememberLazyListState()
 
-    LazyColumn {
+    LaunchedEffect(currentPage) {
+        if (sortedList.isNotEmpty()) {
+            listState.animateScrollToItem(0)
+        }
+    }
+
+    LazyColumn(state = listState) {
         items(sortedList) { item ->
 
             PlaylistItemCard(
