@@ -1,23 +1,17 @@
 package com.ojasx.eduplay.BottomBar
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ojasx.eduplay.API.PlaylistViewModel
@@ -41,43 +35,70 @@ fun BottomBar(
 
     var selectedIndex by remember { mutableIntStateOf(0) }
 
+
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp
+    val bottomBarHeight = when {
+        screenHeightDp < 700 -> 56.dp
+        screenHeightDp < 900 -> 64.dp
+        else -> 72.dp
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            NavigationBar(
-                containerColor = Color(0xFFF8F8F8),
-                tonalElevation = 2.dp
+            Surface(
+                color = Color(0xFFF8F8F8),
+                tonalElevation = 2.dp,
+                modifier = Modifier
+                    .height(bottomBarHeight)
+                    .fillMaxWidth()
             ) {
-                navItemList.forEachIndexed { index, navItem ->
-                    NavigationBarItem(
-                        selected = selectedIndex == index,
-                        onClick = { selectedIndex = index },
-                        icon = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    navItemList.forEachIndexed { index, navItem ->
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .clickable { selectedIndex = index }
+                                .padding(vertical = 8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
                             Icon(
                                 imageVector = navItem.icon,
                                 contentDescription = navItem.label,
                                 tint = if (selectedIndex == index)
                                     Color(0xFF7B4EFF)
                                 else
-                                    Color(0xFF999999)
+                                    Color(0xFF999999),
+                                modifier = Modifier.size(24.dp)
                             )
-                        },
-                        label = {
+                            Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 text = navItem.label,
                                 color = if (selectedIndex == index)
                                     Color(0xFF7B4EFF)
                                 else
-                                    Color(0xFF999999)
+                                    Color(0xFF999999),
+                                style = MaterialTheme.typography.labelSmall
                             )
                         }
-                    )
+                    }
                 }
             }
         }
     ) { innerPadding ->
         ContentScreen(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
             navController = navController,
             playlistViewModel = playlistViewModel,
             selectedIndex = selectedIndex
@@ -95,6 +116,6 @@ fun ContentScreen(
     when (selectedIndex) {
         0 -> HomeScreen(navController, playlistViewModel)
         1 -> PlaylistScreen(playlistViewModel, navController)
-        2 -> SettingsScreen(navController)
+        2 -> SettingsScreen()
     }
 }
