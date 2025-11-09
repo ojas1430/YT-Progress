@@ -16,7 +16,7 @@ import java.util.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun ShowNotificationScreen() {
+fun ShowLocalNotificationScreen() {
     val context = LocalContext.current
     val notificationLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
