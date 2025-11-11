@@ -1,7 +1,8 @@
-package com.ojasx.eduplay.HelpAndSupport
+package com.ojasx.eduplay.HelpAndSupport.ReportABug
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -32,8 +33,8 @@ fun ReportBugButton() {
                 Actual behavior:
                 
                 Device Info:
-                - Android Version: ${android.os.Build.VERSION.RELEASE}
-                - Device: ${android.os.Build.MODEL}
+                - Android Version: ${Build.VERSION.RELEASE}
+                - Device: ${Build.MODEL}
                 """.trimIndent()
             )
         }
