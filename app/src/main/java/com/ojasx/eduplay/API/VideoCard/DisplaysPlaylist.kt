@@ -25,9 +25,20 @@ fun LinkPlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
     val playlistItems by remember { derivedStateOf { viewModel.playlistItems.value } }
 
     // Sort pinned videos on top
-    val sortedList = playlistItems.sortedByDescending { it.isPinned }
     val currentPage by viewModel.currentPage
     val listState = rememberLazyListState()
+
+    var selectedSort by remember { mutableStateOf("Default") }
+
+    // Sort logic
+    val sortedList = remember(playlistItems, selectedSort) {
+        when (selectedSort) {
+            "Completed Watching" -> playlistItems.sortedByDescending { it.isCompleted }
+            "Revise" -> playlistItems.sortedByDescending { it.needsRevision }
+            "Pinned" -> playlistItems.sortedByDescending { it.isPinned }
+            else -> playlistItems
+        }
+    }
 
     LaunchedEffect(currentPage) {
         if (sortedList.isNotEmpty()) {

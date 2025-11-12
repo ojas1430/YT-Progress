@@ -3,9 +3,6 @@ package com.ojasx.eduplay.API.VideoCard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,15 +16,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ojasx.eduplay.API.PlaylistItem
+import com.ojasx.eduplay.API.VideoCard.CardFeatures.CompletedCheckbox
+import com.ojasx.eduplay.API.VideoCard.CardFeatures.Notes.Notes
+import com.ojasx.eduplay.API.VideoCard.CardFeatures.Pin.PinButton
+import com.ojasx.eduplay.API.VideoCard.CardFeatures.ReviseButton
 
 @Composable
 fun PlaylistItemCard(
     item: PlaylistItem,
     onCheckedChange: (Boolean) -> Unit,
-    onNotesClick: () -> Unit,
-    onRevisionClick: () -> Unit,
+    onNotesClick: (String) -> Unit,
+    onRevisionClick: (Boolean) -> Unit,
     isPinned: (Boolean) -> Unit
 ) {
+
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -101,94 +104,37 @@ fun PlaylistItemCard(
             ) {
 
                 // ✅ Checkbox
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Checkbox(
-                        checked = item.isCompleted,
-                        onCheckedChange = onCheckedChange,
-                        colors = CheckboxDefaults.colors(
-                            checkedColor = Color(0xFF4CAF50),
-                            uncheckedColor = Color.LightGray,
-                            checkmarkColor = Color.White
-                        )
-                    )
-                    Text(
-                        text = "Done",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.White
-                    )
-                }
+                CompletedCheckbox(
+                    isInitiallyChecked = item.isCompleted,
+                    onCheckedChange = onCheckedChange
+                )
+
 
                 // 📝 Notes
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .background(
-                                brush = Brush.linearGradient(
-                                    listOf(Color(0xFFcf8bf3), Color(0xFFfdb99b))
-                                ),
-                                shape = RoundedCornerShape(10.dp)
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Notes",
-                            tint = Color.White,
-                            modifier = Modifier.size(18.dp)
-                        )
+                Notes(
+                    noteText = item.note ?: "",
+                    onNotesSave = { newNote ->
+                        item.note = newNote
+                        onNotesClick(newNote)
                     }
-                    Spacer(Modifier.height(6.dp))
-                    Text(
-                        text = "Notes",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.White
-                    )
-                }
+                )
 
-// 🔁 Revision
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .background(
-                                brush = Brush.linearGradient(
-                                    listOf(Color(0xFFa770ef), Color(0xFFcf8bf3))
-                                ),
-                                shape = RoundedCornerShape(10.dp)
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Refresh,
-                            contentDescription = "Revision",
-                            tint = Color.White,
-                            modifier = Modifier.size(18.dp)
-                        )
+                // 🔁 Revision
+                ReviseButton(
+                    isRevised = item.needsRevision,
+                    onToggle = {
+                        !item.needsRevision
                     }
-                    Spacer(Modifier.height(6.dp))
-                    Text(
-                        text = "Revise",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.White
-                    )
-                }
-
+                )
 
                 // 📌 Pin
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    PinStarButton(isPinned = item.isPinned, onPinClick = isPinned)
-                    Text("Pin", style = MaterialTheme.typography.bodySmall, color = Color.White)
-                }
+                PinButton(
+                    isPin = item.isPinned,
+                    onPinChanged = {
+                        isPinned
+                    }
+                )
+
             }
         }
     }

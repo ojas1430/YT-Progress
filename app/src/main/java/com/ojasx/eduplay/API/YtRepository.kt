@@ -1,12 +1,12 @@
 package com.ojasx.eduplay.API
 
 import android.util.Log
-import com.ojasx.eduplay.DataBase.PlaylistDao
-import com.ojasx.eduplay.DataBase.PlaylistEntity
+import com.ojasx.eduplay.Data.Local.RoomDataBase.PlaylistDao
+import com.ojasx.eduplay.Data.Local.RoomDataBase.PlaylistEntity
 import retrofit2.await
 
 class YouTubeRepository(
-    private val dao: PlaylistDao? = null  // optional if no DB provided
+    private val dao: PlaylistDao? = null
 ) {
     private val api = RetrofitClient.apiService
 

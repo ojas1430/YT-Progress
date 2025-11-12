@@ -1,14 +1,12 @@
 package com.ojasx.eduplay.API
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.ojasx.eduplay.BuildConfig
-import com.ojasx.eduplay.DataBase.AppDatabase
+import com.ojasx.eduplay.Data.Local.RoomDataBase.AppDatabase
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(application: Application) : AndroidViewModel(application) {
@@ -18,7 +16,8 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         application,
         AppDatabase::class.java,
         "playlist_db"
-    ).build()
+    ).fallbackToDestructiveMigration()
+        .build()
 
     private val repository = YouTubeRepository(db.playlistDao())
     var playlistLink = mutableStateOf("")
@@ -31,12 +30,13 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
     var totalPages = mutableStateOf(1)
     private var nextPageToken: String? = null
     private var prevPageToken: String? = null
-    private var pageTokens = mutableListOf<String?>(null) // store tokens by page index
+    private var pageTokens = mutableListOf<String?>(null)
     private var playlistId: String? = null
 
     init {
         loadCachedVideos()
     }
+
 
 
     fun fetchPlaylistVideos(initial: Boolean = true, pageToken: String? = null) {

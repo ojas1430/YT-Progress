@@ -11,7 +11,7 @@ data class YouTubePlaylistResponse(
 data class PlaylistItem(
     val snippet: Snippet,
     var isCompleted : Boolean = false,
-    var hasNotes : Boolean = false,
+    var note : String? = null,
     var needsRevision : Boolean = false,
     var isPinned: Boolean = false
 )

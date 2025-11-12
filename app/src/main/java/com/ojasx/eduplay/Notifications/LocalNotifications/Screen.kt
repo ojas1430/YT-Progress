@@ -144,7 +144,6 @@ fun ShowLocalNotificationScreen(navController: NavHostController) {
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Header section
                 Text(
                     text = "Manage Your Notifications",
                     style = MaterialTheme.typography.titleMedium.copy(
