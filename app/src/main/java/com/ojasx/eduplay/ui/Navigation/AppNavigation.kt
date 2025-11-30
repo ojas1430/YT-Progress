@@ -16,18 +16,21 @@ import com.ojasx.eduplay.LoginOrSignUpPage.LoginPage.LoginPage
 import com.ojasx.eduplay.LoginOrSignUpPage.SignUpPgae.SignUpPage
 import com.ojasx.eduplay.ui.MainScreen.MainScreen
 import com.ojasx.eduplay.Notifications.LocalNotifications.ShowLocalNotificationScreen
+import com.ojasx.eduplay.ViewModel.ProfileViewModel
+import com.ojasx.eduplay.ui.profile.UserProfileScreen
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     val playlistviewModel : PlaylistViewModel = viewModel()
+    val profileViewModel: ProfileViewModel = viewModel()
 
     NavHost(
         navController = navController,
-        startDestination ="BottomBar"  //"MainScreen"//
+        startDestination ="BottomBar"
     ) {
         composable("BottomBar"){
-            BottomBar(playlistviewModel,navController)
+            BottomBar(playlistviewModel,profileViewModel,navController)
         }
         composable("MainScreen") {
             MainScreen(navController)
@@ -39,14 +42,14 @@ fun AppNavigation() {
             SignUpPage(navController)
         }
         composable("Home") {
-            HomePage(navController,playlistviewModel)
+            HomePage(navController,playlistviewModel,profileViewModel)
         }
 
         composable("PlaylistScreen"){
             PlaylistScreen(playlistviewModel,navController)
         }
         composable("SettingsScreen"){
-            SettingsScreen(navController)
+            SettingsScreen(navController,profileViewModel)
         }
         composable("ShowLocalNotificationScreen"){
             ShowLocalNotificationScreen(navController)
@@ -56,6 +59,9 @@ fun AppNavigation() {
         }
         composable("ReportBugButton"){
             ReportBugButton()
+        }
+        composable("UserProfileScreen"){
+            UserProfileScreen(navController, profileViewModel)
         }
     }
 }

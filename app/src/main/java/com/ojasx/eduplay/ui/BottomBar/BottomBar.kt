@@ -19,11 +19,13 @@ import com.ojasx.eduplay.ui.BottomBar.Screens.HomeScreen
 import com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen.PlaylistScreen
 import com.ojasx.eduplay.ui.BottomBar.Screens.SettingsScreen.SettingsScreen
 import com.ojasx.eduplay.Data.Local.BottomBar.NavItem
+import com.ojasx.eduplay.ViewModel.ProfileViewModel
 import com.ojasx.eduplay.ui.Reusables.StatusBar
 
 @Composable
 fun BottomBar(
     playlistViewModel: PlaylistViewModel,
+    profileViewModel: ProfileViewModel,
     navController: NavController,
 ) {
     StatusBar()
@@ -102,6 +104,7 @@ fun BottomBar(
                 .fillMaxSize(),
             navController = navController,
             playlistViewModel = playlistViewModel,
+            profileViewModel = profileViewModel,
             selectedIndex = selectedIndex,
         )
     }
@@ -112,11 +115,12 @@ fun ContentScreen(
     modifier: Modifier,
     navController: NavController,
     playlistViewModel: PlaylistViewModel,
+    profileViewModel: ProfileViewModel,
     selectedIndex: Int = 0,
 ) {
     when (selectedIndex) {
         0 -> HomeScreen(navController, playlistViewModel)
         1 -> PlaylistScreen(playlistViewModel, navController)
-        2 -> SettingsScreen(navController)
+        2 -> SettingsScreen(navController,profileViewModel)
     }
 }

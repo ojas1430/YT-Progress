@@ -40,9 +40,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.navigation.NavController
+import com.ojasx.eduplay.ViewModel.ProfileViewModel
+import com.ojasx.eduplay.ui.profile.profile
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(
+    navController: NavController,
+    profileViewModel: ProfileViewModel
+    ) {
 
     Column(
         modifier = Modifier
@@ -55,34 +60,7 @@ fun SettingsScreen(navController: NavController) {
             .padding(16.dp)
     ) {
         // 🔹 Profile Section
-        Text("Profile", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.White)
-        Spacer(Modifier.height(12.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.user),
-                contentDescription = "Profile",
-                modifier = Modifier
-                    .size(70.dp)
-                    .clip(CircleShape)
-                    .border(2.dp, Color.White, CircleShape)
-            )
-            Spacer(Modifier.width(12.dp))
-            Column {
-                Text("Ojas Choudhary", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                Text("ojas1430@gmail.com", color = Color.White.copy(alpha = 0.8f), fontSize = 14.sp)
-                Spacer(Modifier.height(6.dp))
-                OutlinedButton(
-                    onClick = { },
-                    border = BorderStroke(1.dp, Color.White),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
-                ) {
-                    Text("Edit Profile")
-                }
-            }
-        }
+        profile(navController,profileViewModel)
 
         Spacer(Modifier.height(24.dp))
         Divider(color = Color.White.copy(alpha = 0.3f))
