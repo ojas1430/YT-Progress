@@ -47,7 +47,7 @@ fun ReportABugMainScreen(navController: NavController) {
                 title = "Something Went Wrong?",
                 description = "Tell us what went wrong so we can fix it as soon as possible.",
                 "Report",
-                onClick = {navController.navigate("ReportBugButton")},
+                onClick = {  navController.navigate("ReportBugButton") },
                 navController
             )
         }

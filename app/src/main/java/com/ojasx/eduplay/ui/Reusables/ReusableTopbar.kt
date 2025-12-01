@@ -45,7 +45,6 @@ fun ReusableTopBar(
                 )
             }
 
-            // Title
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge.copy(color = Color.White),

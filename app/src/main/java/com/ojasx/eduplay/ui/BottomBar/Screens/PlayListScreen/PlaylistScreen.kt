@@ -17,7 +17,7 @@ fun PlaylistScreen(
 
 
     Box(modifier = Modifier.fillMaxSize()) {
-        SoftBlurBackground()
+        PlaylistSoftBlurBackground()
 
         Column(
             modifier = Modifier

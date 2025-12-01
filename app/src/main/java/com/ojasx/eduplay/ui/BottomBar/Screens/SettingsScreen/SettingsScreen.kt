@@ -82,7 +82,9 @@ fun SettingsScreen(
         SettingsSectionTitle("Playback & Experience")
         SettingsItem("Default playback speed")
         SettingsItem("Auto-mark video as completed")
-        SettingsItem("Theme: Light / Dark")
+        SettingsItem("Theme: Light / Dark"){
+            navController.navigate("FeatureComingSoonScreen")
+        }
 
         // Data & Backup
         SettingsSectionTitle("Data & Backup")
@@ -92,7 +94,9 @@ fun SettingsScreen(
 
         // Help & Support
         SettingsSectionTitle("Help & Support")
-        SettingsItem("FAQs")
+        SettingsItem("FAQs"){
+            navController.navigate("FAQScreen")
+        }
         SettingsItem("Contact developer")
         SettingsItem("Rate this app")
         SettingsItem("Report a bug"){

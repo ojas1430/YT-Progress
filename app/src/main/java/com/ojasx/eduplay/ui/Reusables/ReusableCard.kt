@@ -27,7 +27,7 @@ fun ReusableCard(
     title: String,
     description:String,
     buttonText:String,
-    onClick: () -> Unit,
+    onClick: @Composable () -> Unit,
     navController: NavController
 ) {
     Box(

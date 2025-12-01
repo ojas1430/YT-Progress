@@ -17,6 +17,8 @@ import com.ojasx.eduplay.LoginOrSignUpPage.SignUpPgae.SignUpPage
 import com.ojasx.eduplay.ui.MainScreen.MainScreen
 import com.ojasx.eduplay.Notifications.LocalNotifications.ShowLocalNotificationScreen
 import com.ojasx.eduplay.ViewModel.ProfileViewModel
+import com.ojasx.eduplay.ui.Reusables.FeatureComingSoonScreen
+import com.ojasx.eduplay.ui.helpAndSupport.faq.FAQScreen
 import com.ojasx.eduplay.ui.profile.UserProfileScreen
 
 @Composable
@@ -62,6 +64,12 @@ fun AppNavigation() {
         }
         composable("UserProfileScreen"){
             UserProfileScreen(navController, profileViewModel)
+        }
+        composable("FeatureComingSoonScreen"){
+            FeatureComingSoonScreen(navController)
+        }
+        composable("FAQScreen"){
+            FAQScreen(navController)
         }
     }
 }
