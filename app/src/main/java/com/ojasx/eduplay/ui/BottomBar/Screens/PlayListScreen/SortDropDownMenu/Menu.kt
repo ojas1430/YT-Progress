@@ -1,8 +1,6 @@
 package com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen.SortDropDownMenu
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -15,103 +13,83 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SortDropdownMenu(
-    selectedSort : String,
-    onSortSelected: (String)->Unit
+    selectedSort: String,
+    onSortSelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var options = listOf("Default", "Completed Watching", "Revise", "Pinned")
-    var selectedOption by remember { mutableStateOf(options[0]) }
+    val options = listOf("Default", "Completed Watching", "Revise", "Pinned")
 
     val purple = Color(0xFF7B4EFF)
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+        modifier = Modifier.padding(horizontal = 16.dp)
     ) {
-        OutlinedButton(
-            onClick = { expanded = true },
-            modifier = Modifier
-                .height(42.dp)
-                .width(160.dp),
-            border = BorderStroke(1.dp, Color(0xFFFDB99B)),
-            colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = Color(0x22FFFFFF)
-            ),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Text(
-                text = "Sort By",
-                color = Color.White,
-                fontWeight = FontWeight.Medium,
-                fontSize = 14.sp
-            )
-        }
 
-        DropdownMenu(
+        OutlinedTextField(
+            value = selectedSort,
+            onValueChange = {},
+            readOnly = true,
+            singleLine = true,
+            label = { Text("Sort By") },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = purple,
+                unfocusedIndicatorColor = Color(0xFFFDB99B),
+                focusedTextColor = purple,
+                unfocusedTextColor = Color.White,
+                focusedLabelColor = Color.White,
+                unfocusedLabelColor = purple.copy(0.7f),
+                cursorColor = purple
+            ),
+
+            modifier = Modifier
+                .menuAnchor()
+                .background(purple, RoundedCornerShape(8.dp))
+                .width(180.dp)
+        )
+
+        ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .border(
-                    width = 2.dp,
-                    color = purple,
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .shadow(
-                    elevation = 6.dp,
-                    shape = RoundedCornerShape(16.dp),
-                    ambientColor = Color(0x33000000),
-                    spotColor = Color(0x33000000)
-                )
+                .width(180.dp)
+                .shadow(12.dp, RoundedCornerShape(12.dp))
+                .background(Color.White, RoundedCornerShape(12.dp))
         ) {
-            options.forEachIndexed { index, option ->
+            options.forEach { option ->
                 DropdownMenuItem(
                     text = {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = option,
-                                color = if (option == selectedOption) purple else Color(0xFF1A1A1A),
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Medium,
-                                letterSpacing = 0.2.sp,
-                                modifier = Modifier.padding(horizontal = 8.dp)
-                            )
-
-                            if (option == selectedOption) {
-                                Icon(
-                                    imageVector = Icons.Default.Check,
-                                    contentDescription = "Selected",
-                                    tint = purple,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                        }
+                        Text(
+                            text = option,
+                            color = if (option == selectedSort) purple else Color.Black,
+                            fontWeight = if (option == selectedSort)
+                                FontWeight.SemiBold else FontWeight.Medium
+                        )
                     },
                     onClick = {
-                        selectedOption = option
+                        onSortSelected(option)
                         expanded = false
+                    },
+                    trailingIcon = {
+                        if (option == selectedSort) {
+                            Icon(
+                                Icons.Default.Check,
+                                contentDescription = null,
+                                tint = purple
+                            )
+                        }
                     }
                 )
-
-                // thin divider line between items
-                if (index != options.lastIndex) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(purple.copy(alpha = 0.4f))
-                    )
-                }
             }
         }
     }
 }
+
+
