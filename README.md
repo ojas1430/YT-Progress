@@ -14,25 +14,25 @@ A simple Android app where you can paste any YouTube playlist link and instantly
 
 <!-- App Screenshots -->
 <p align="center">
-  <img src="screenshots/s1.png" width="380" alt="Screenshot 1"/>
-  <img src="screenshots/s2.png" width="380" alt="Screenshot 2"/>
-  <img src="screenshots/s3.png" width="380" alt="Screenshot 3"/>
-  <img src="screenshots/s4.png" width="380" alt="Screenshot 4"/>
+  <img src="screenshots/s1.png" width="200" alt="Screenshot 1"/>
+  <img src="screenshots/s2.png" width="200" alt="Screenshot 2"/>
+  <img src="screenshots/s3.png" width="200" alt="Screenshot 3"/>
+  <img src="screenshots/s4.png" width="200" alt="Screenshot 4"/>
 </p>
 <p align="center">
-  <img src="screenshots/s5.png" width="380" alt="Screenshot 5"/>
-  <img src="screenshots/s6.png" width="380" alt="Screenshot 6"/>
-  <img src="screenshots/s7.png" width="380" alt="Screenshot 7"/>
-  <img src="screenshots/s8.png" width="380" alt="Screenshot 8"/>
+  <img src="screenshots/s5.png" width="200" alt="Screenshot 5"/>
+  <img src="screenshots/s6.png" width="200" alt="Screenshot 6"/>
+  <img src="screenshots/s7.png" width="200" alt="Screenshot 7"/>
+  <img src="screenshots/s8.png" width="200" alt="Screenshot 8"/>
 </p>
 <p align="center">
-  <img src="screenshots/s9.png" width="380" alt="Screenshot 9"/>
-  <img src="screenshots/s10.png" width="380" alt="Screenshot 10"/>
-  <img src="screenshots/s11.png" width="380" alt="Screenshot 11"/>
-  <img src="screenshots/s12.png" width="380" alt="Screenshot 12"/>
+  <img src="screenshots/s9.png" width="200" alt="Screenshot 9"/>
+  <img src="screenshots/s10.png" width="200" alt="Screenshot 10"/>
+  <img src="screenshots/s11.png" width="200" alt="Screenshot 11"/>
+  <img src="screenshots/s12.png" width="200" alt="Screenshot 12"/>
 </p>
 <p align="center">
-  <img src="screenshots/last.png" width="380" alt="Last Screenshot"/>
+  <img src="screenshots/last.png" width="200" alt="Last Screenshot"/>
 </p>
 
 <br/>
