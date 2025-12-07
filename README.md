@@ -12,19 +12,32 @@ A simple Android app where you can paste any YouTube playlist link and instantly
 
 ## 📱 Screenshots
 
-![Screenshot 1](screenshots/s1.png width="380")
-![Screenshot 2](screenshots/s2.png)
-![Screenshot 3](screenshots/s3.png)
-![Screenshot 4](screenshots/s4.png)
-![Screenshot 5](screenshots/s5.png)
-![Screenshot 6](screenshots/s6.png)
-![Screenshot 7](screenshots/s7.png)
-![Screenshot 8](screenshots/s8.png)
-![Screenshot 9](screenshots/s9.png)
-![Screenshot 10](screenshots/s10.png)
-![Screenshot 11](screenshots/s11.png)
-![Screenshot 12](screenshots/s12.png)
-![Last Screenshot](screenshots/last.png)
+<!-- App Screenshots -->
+<p align="center">
+  <img src="screenshots/s1.png" width="380" alt="Screenshot 1"/>
+  <img src="screenshots/s2.png" width="380" alt="Screenshot 2"/>
+  <img src="screenshots/s3.png" width="380" alt="Screenshot 3"/>
+  <img src="screenshots/s4.png" width="380" alt="Screenshot 4"/>
+</p>
+<p align="center">
+  <img src="screenshots/s5.png" width="380" alt="Screenshot 5"/>
+  <img src="screenshots/s6.png" width="380" alt="Screenshot 6"/>
+  <img src="screenshots/s7.png" width="380" alt="Screenshot 7"/>
+  <img src="screenshots/s8.png" width="380" alt="Screenshot 8"/>
+</p>
+<p align="center">
+  <img src="screenshots/s9.png" width="380" alt="Screenshot 9"/>
+  <img src="screenshots/s10.png" width="380" alt="Screenshot 10"/>
+  <img src="screenshots/s11.png" width="380" alt="Screenshot 11"/>
+  <img src="screenshots/s12.png" width="380" alt="Screenshot 12"/>
+</p>
+<p align="center">
+  <img src="screenshots/last.png" width="380" alt="Last Screenshot"/>
+</p>
+
+<br/>
+
+*(Screenshots taken on Samsung Galaxy S21 Ultra)*
 
 
 ## ⚠️ App Status
