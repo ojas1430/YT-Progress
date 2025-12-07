@@ -13,18 +13,18 @@ A simple Android app where you can paste any YouTube playlist link and instantly
 ## 📱 Screenshots
 
 ![Screenshot 1](screenshots/s1.png)
-![Screenshot 2](YT-Progress/screenshots/s2.png)
-![Screenshot 3](YT-Progress/screenshots/s3.png)
-![Screenshot 4](YT-Progress/screenshots/s4.png)
-![Screenshot 5](YT-Progress/screenshots/s5.png)
-![Screenshot 6](YT-Progress/screenshots/s6.png)
-![Screenshot 7](YT-Progress/screenshots/s7.png)
-![Screenshot 8](YT-Progress/screenshots/s8.png)
-![Screenshot 9](YT-Progress/screenshots/s9.png)
-![Screenshot 10](YT-Progress/screenshots/s10.png)
-![Screenshot 11](YT-Progress/screenshots/s11.png)
-![Screenshot 12](YT-Progress/screenshots/s12.png)
-![Last Screenshot](YT-Progress/screenshots/last.png)
+![Screenshot 2](screenshots/s2.png)
+![Screenshot 3](screenshots/s3.png)
+![Screenshot 4](screenshots/s4.png)
+![Screenshot 5](screenshots/s5.png)
+![Screenshot 6](screenshots/s6.png)
+![Screenshot 7](screenshots/s7.png)
+![Screenshot 8](screenshots/s8.png)
+![Screenshot 9](screenshots/s9.png)
+![Screenshot 10](screenshots/s10.png)
+![Screenshot 11](screenshots/s11.png)
+![Screenshot 12](screenshots/s12.png)
+![Last Screenshot](screenshots/last.png)
 
 
 ## ⚠️ App Status
