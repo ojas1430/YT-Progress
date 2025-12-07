@@ -12,7 +12,7 @@ A simple Android app where you can paste any YouTube playlist link and instantly
 
 ## 📱 Screenshots
 
-![Screenshot 1](YT-Progress/screenshots/s1.png)
+![Screenshot 1](screenshots/s1.png)
 ![Screenshot 2](YT-Progress/screenshots/s2.png)
 ![Screenshot 3](YT-Progress/screenshots/s3.png)
 ![Screenshot 4](YT-Progress/screenshots/s4.png)
