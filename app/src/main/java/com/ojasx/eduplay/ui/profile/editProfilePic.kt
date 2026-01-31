@@ -1,3 +1,4 @@
+
 package com.ojasx.eduplay.ui.profile
 
 import android.net.Uri
@@ -100,8 +101,6 @@ fun ProfileImagePicker(viewModel: ProfileViewModel) {
         }
         Text("Tap to change your profile photo",
             style = MaterialTheme.typography.bodySmall
-         )
+        )
     }
 }
-
-

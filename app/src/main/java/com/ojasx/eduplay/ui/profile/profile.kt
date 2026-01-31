@@ -51,14 +51,8 @@ fun profile(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.user),
-            contentDescription = "Profile",
-            modifier = Modifier
-                .size(70.dp)
-                .clip(CircleShape)
-                .border(2.dp, Color.White, CircleShape)
-        )
+        displayProfilePic(profileViewModel = viewModel)
+
         Spacer(Modifier.width(12.dp))
         Column {
             Text(

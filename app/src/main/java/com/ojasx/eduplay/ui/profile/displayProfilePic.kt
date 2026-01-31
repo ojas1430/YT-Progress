@@ -19,14 +19,16 @@ import com.ojasx.eduplay.R
 @Composable
 fun displayProfilePic(profileViewModel: ProfileViewModel) {
     val profileUri by profileViewModel.profileImage.observeAsState()
-    val finalUri = profileUri?.let { Uri.parse(it) }
+
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val profileSize = (screenWidth * 0.18).dp
+
+    val painter = rememberAsyncImagePainter(
+        model = profileUri ?: R.drawable.user
+    )
+
     Image(
-        painter = if (finalUri != null)
-            rememberAsyncImagePainter(finalUri)
-        else
-            rememberAsyncImagePainter(model = R.drawable.user),
+        painter = painter,
         contentDescription = "Profile Image",
         modifier = Modifier
             .size(profileSize)

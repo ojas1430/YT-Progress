@@ -1,20 +1,15 @@
 package com.ojasx.eduplay.ui.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ojasx.eduplay.ViewModel.ProfileViewModel
@@ -81,16 +76,8 @@ fun UserProfileScreen(
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Profile icon
-                Icon(
-                    imageVector = Icons.Filled.Person,
-                    contentDescription = "Profile",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .background(Color.LightGray, CircleShape)
-                        .padding(16.dp),
-                    tint = Color.Gray
-                )
+                // ✅ Profile Image Picker (Edit Profile Feature Added Here)
+                ProfileImagePicker(viewModel = profileviewModel)
 
                 Spacer(modifier = Modifier.height(32.dp))
 

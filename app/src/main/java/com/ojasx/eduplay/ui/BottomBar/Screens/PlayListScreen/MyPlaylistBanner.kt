@@ -14,22 +14,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen.SortDropDownMenu.SortDropdownMenu
 @Composable
-fun MyPlaylistBanner() {
-    Box(
+fun MyPlaylistBanner(
+    selectedSort: String,
+    onSortSelected: (String) -> Unit
+) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp),
-        contentAlignment = Alignment.Center
+            .padding(horizontal = 16.dp, vertical = 2.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
+
         Text(
             text = "My Playlists ▶️",
             style = MaterialTheme.typography.headlineSmall.copy(
                 fontWeight = FontWeight.Bold,
                 color = Color.White
-            ),
-            textAlign = TextAlign.Center
+            )
+        )
+
+        SortDropdownMenu(
+            selectedSort = selectedSort,
+            onSortSelected = onSortSelected
         )
     }
 }

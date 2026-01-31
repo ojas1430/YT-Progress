@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -18,7 +19,6 @@ import com.ojasx.eduplay.API.PlaylistViewModel
 import com.ojasx.eduplay.ui.BottomBar.Screens.HomeScreen
 import com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen.PlaylistScreen
 import com.ojasx.eduplay.ui.BottomBar.Screens.SettingsScreen.SettingsScreen
-import com.ojasx.eduplay.Data.Local.BottomBar.NavItem
 import com.ojasx.eduplay.ViewModel.ProfileViewModel
 import com.ojasx.eduplay.ui.Reusables.StatusBar
 
@@ -124,3 +124,9 @@ fun ContentScreen(
         2 -> SettingsScreen(navController,profileViewModel)
     }
 }
+
+
+data class NavItem(
+    val label: String,
+    val icon: ImageVector
+)

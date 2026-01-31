@@ -14,10 +14,16 @@ class ProfileViewModel : ViewModel() {
     private val _email = MutableLiveData("ojas@email.com")
     val email: LiveData<String> = _email
 
+    private val _ProfileImage = MutableLiveData<String>(null)
+    val profileImage : LiveData<String?> = _ProfileImage
+
     fun updateProfile(first: String, last: String, mail: String) {
         _firstname.value = first
         _lastname.value = last
         _email.value = mail
+    }
+    fun updateProfileImage(uri : String?){
+        _ProfileImage.value = uri
     }
 
 }
