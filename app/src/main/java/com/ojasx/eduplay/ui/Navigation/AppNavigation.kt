@@ -1,3 +1,4 @@
+
 package com.ojasx.eduplay.ui.Navigation
 
 import androidx.compose.runtime.Composable
@@ -9,8 +10,8 @@ import com.ojasx.eduplay.API.PlaylistViewModel
 import com.ojasx.eduplay.ui.BottomBar.BottomBar
 import com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen.PlaylistScreen
 import com.ojasx.eduplay.ui.BottomBar.Screens.SettingsScreen.SettingsScreen
-import com.ojasx.eduplay.ui.HelpAndSupport.ReportABug.ReportABugMainScreen
-import com.ojasx.eduplay.ui.HelpAndSupport.ReportABug.ReportBugButton
+//import com.ojasx.eduplay.ui.HelpAndSupport.ReportABug.ReportABugMainScreen
+//import com.ojasx.eduplay.ui.HelpAndSupport.ReportABug.ReportBugButton
 import com.ojasx.eduplay.ui.HomePage
 import com.ojasx.eduplay.LoginOrSignUpPage.LoginPage.LoginPage
 import com.ojasx.eduplay.LoginOrSignUpPage.SignUpPgae.SignUpPage
@@ -56,12 +57,12 @@ fun AppNavigation() {
         composable("ShowLocalNotificationScreen"){
             ShowLocalNotificationScreen(navController)
         }
-        composable("ReportABugMainScreen"){
-            ReportABugMainScreen(navController)
-        }
-        composable("ReportBugButton"){
-            ReportBugButton()
-        }
+//        composable("ReportABugMainScreen"){
+//            ReportABugMainScreen(navController)
+//        }
+//        composable("ReportBugButton"){
+//            ReportBugButton()
+//        }
         composable("UserProfileScreen"){
             UserProfileScreen(navController, profileViewModel)
         }

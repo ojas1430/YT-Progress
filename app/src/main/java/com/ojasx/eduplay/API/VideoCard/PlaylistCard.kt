@@ -131,7 +131,7 @@ fun PlaylistItemCard(
                 PinButton(
                     isPin = item.isPinned,
                     onPinChanged = {
-                        isPinned
+                            isPinned
                     }
                 )
 

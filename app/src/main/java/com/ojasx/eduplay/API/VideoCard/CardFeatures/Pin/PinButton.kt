@@ -26,7 +26,7 @@ fun PinButton(
                 isPin = !isPin
             },
 
-        )
+            )
         Text("Pin", style = MaterialTheme.typography.bodySmall, color = Color.White)
     }
 }

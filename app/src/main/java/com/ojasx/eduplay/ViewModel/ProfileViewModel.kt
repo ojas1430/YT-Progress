@@ -3,6 +3,8 @@ package com.ojasx.eduplay.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class ProfileViewModel : ViewModel() {
     private val _firstname = MutableLiveData("Ojas")
@@ -14,7 +16,7 @@ class ProfileViewModel : ViewModel() {
     private val _email = MutableLiveData("ojas@email.com")
     val email: LiveData<String> = _email
 
-    private val _ProfileImage = MutableLiveData<String>(null)
+    private val _ProfileImage = MutableLiveData<String?>(null)
     val profileImage : LiveData<String?> = _ProfileImage
 
     fun updateProfile(first: String, last: String, mail: String) {
