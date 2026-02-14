@@ -1,6 +1,8 @@
+
 package com.ojasx.eduplay.API
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,9 +18,9 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         application,
         AppDatabase::class.java,
         "playlist_db"
-    ).fallbackToDestructiveMigration()
-        .build()
+    ).build()
 
+    private val completedMap = mutableStateMapOf<String, Boolean>()
     private val repository = YouTubeRepository(db.playlistDao())
     var playlistLink = mutableStateOf("")
     var playlistItems = mutableStateOf<List<PlaylistItem>>(emptyList())
@@ -39,7 +41,10 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
 
 
 
-    fun fetchPlaylistVideos(initial: Boolean = true, pageToken: String? = null) {
+    fun fetchPlaylistVideos(
+        initial: Boolean = true,
+        pageToken: String? = null
+    ) {
         val id = if (initial) extractPlaylistId(playlistLink.value.trim()) else playlistId
         if (id.isNullOrEmpty()) {
             errorMessage.value = "Invalid playlist link"
@@ -60,7 +65,14 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                 return@launch
             }
 
-            playlistItems.value = response.items ?: emptyList()
+            playlistItems.value = response.items?.map { item ->
+                val videoId = item.snippet.resourceId?.videoId
+                item.copy(
+                    isCompleted = completedMap[videoId] ?: false
+                )
+            } ?: emptyList()
+
+
             nextPageToken = response.nextPageToken
             prevPageToken = response.prevPageToken
 
@@ -103,5 +115,24 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
+
+    fun updateCompleted(videoId: String, completed: Boolean) {
+        completedMap[videoId] = completed
+
+        playlistItems.value = playlistItems.value.map {
+            if (it.snippet.resourceId?.videoId == videoId) {
+                it.copy(isCompleted = completed)
+            } else it
+        }
+    }
+
+    fun updatePinned(videoId: String, pinned: Boolean) {
+        playlistItems.value = playlistItems.value.map {
+            if (it.snippet.resourceId?.videoId == videoId) {
+                it.copy(isPinned = pinned)
+            } else it
+        }
+    }
+
 
 }
