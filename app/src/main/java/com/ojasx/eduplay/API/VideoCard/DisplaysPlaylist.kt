@@ -1,3 +1,4 @@
+
 package com.ojasx.eduplay.API.VideoCard
 
 import androidx.compose.foundation.layout.*
@@ -50,6 +51,7 @@ fun LinkPlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
         items(sortedList) { item ->
 
             PlaylistItemCard(
+                viewModel,
                 item = item,
                 onCheckedChange = { checked ->
                     item.isCompleted = checked

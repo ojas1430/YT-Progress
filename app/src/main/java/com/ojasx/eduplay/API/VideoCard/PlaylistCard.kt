@@ -1,3 +1,4 @@
+
 package com.ojasx.eduplay.API.VideoCard
 
 import androidx.compose.foundation.background
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ojasx.eduplay.API.PlaylistItem
+import com.ojasx.eduplay.API.PlaylistViewModel
 import com.ojasx.eduplay.API.VideoCard.CardFeatures.CompletedCheckbox
 import com.ojasx.eduplay.API.VideoCard.CardFeatures.Notes.Notes
 import com.ojasx.eduplay.API.VideoCard.CardFeatures.Pin.PinButton
@@ -23,12 +25,15 @@ import com.ojasx.eduplay.API.VideoCard.CardFeatures.ReviseButton
 
 @Composable
 fun PlaylistItemCard(
+    playlistviewModel: PlaylistViewModel,
     item: PlaylistItem,
     onCheckedChange: (Boolean) -> Unit,
     onNotesClick: (String) -> Unit,
     onRevisionClick: (Boolean) -> Unit,
     isPinned: (Boolean) -> Unit
 ) {
+
+    val videoId = item.snippet.resourceId?.videoId ?: return
 
 
     Card(
@@ -105,8 +110,13 @@ fun PlaylistItemCard(
 
                 // ✅ Checkbox
                 CompletedCheckbox(
-                    isInitiallyChecked = item.isCompleted,
-                    onCheckedChange = onCheckedChange
+                    isChecked = item.isCompleted,
+                    onCheckedChange = { checked ->
+                        playlistviewModel.updateCompleted(
+                            item.snippet.resourceId.videoId,
+                            checked
+                        )
+                    }
                 )
 
 
@@ -114,24 +124,33 @@ fun PlaylistItemCard(
                 Notes(
                     noteText = item.note ?: "",
                     onNotesSave = { newNote ->
-                        item.note = newNote
-                        onNotesClick(newNote)
+                        playlistviewModel.updateNote(
+                            item.snippet.resourceId.videoId,
+                            newNote
+                        )
                     }
                 )
+
 
                 // 🔁 Revision
                 ReviseButton(
                     isRevised = item.needsRevision,
-                    onToggle = {
-                        !item.needsRevision
+                    onToggle = { revised ->
+                        playlistviewModel.updateRevise(
+                            item.snippet.resourceId.videoId,
+                            revised
+                        )
                     }
                 )
 
                 // 📌 Pin
                 PinButton(
                     isPin = item.isPinned,
-                    onPinChanged = {
-                            isPinned
+                    onPinChanged = {checked ->
+                        playlistviewModel.updatePinned(
+                            item.snippet.resourceId.videoId,
+                            checked
+                        )
                     }
                 )
 

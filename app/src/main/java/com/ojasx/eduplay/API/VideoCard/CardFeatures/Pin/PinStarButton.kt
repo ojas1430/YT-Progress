@@ -15,7 +15,7 @@ fun PinStarButton(
 ) {
     IconButton(
         onClick = {
-            onPinClick(!isPinned) // toggle
+            onPinClick(!isPinned)
         }
     ) {
         Icon(

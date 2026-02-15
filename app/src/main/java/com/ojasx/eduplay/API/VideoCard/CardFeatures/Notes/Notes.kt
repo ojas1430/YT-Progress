@@ -32,7 +32,6 @@ fun Notes(
 ) {
 
     var showDialog by remember { mutableStateOf(false) }
-    var noteText by remember { mutableStateOf(noteText) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,8 +72,8 @@ fun Notes(
             initialNote = noteText,
             onDismiss = { showDialog = false },
             onSave = { newNote ->
-                noteText = newNote
                 onNotesSave(newNote)
+                showDialog = false
 
             }
         )

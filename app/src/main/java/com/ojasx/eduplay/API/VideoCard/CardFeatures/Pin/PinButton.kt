@@ -16,17 +16,20 @@ fun PinButton(
     isPin : Boolean,
     onPinChanged : (Boolean)-> Unit
 ) {
-    var isPin by remember { mutableStateOf(false) }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         PinStarButton(
             isPinned = isPin,
-            onPinClick = {
-                isPin = !isPin
-            },
+            onPinClick = { newValue ->
+                onPinChanged(newValue)
+            }
 
             )
-        Text("Pin", style = MaterialTheme.typography.bodySmall, color = Color.White)
+        Text(
+            "Pin",
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.White
+        )
     }
 }

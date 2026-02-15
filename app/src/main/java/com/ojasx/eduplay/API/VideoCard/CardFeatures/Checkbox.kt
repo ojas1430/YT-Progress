@@ -11,20 +11,16 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun CompletedCheckbox(
-    isInitiallyChecked: Boolean,
+    isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    var isChecked by remember { mutableStateOf(isInitiallyChecked) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Checkbox(
             checked = isChecked,
-            onCheckedChange = { checked ->
-                isChecked = checked
-                onCheckedChange(checked)
-            },
+            onCheckedChange = onCheckedChange,
             colors = CheckboxDefaults.colors(
                 checkedColor = Color(0xFF4CAF50),
                 uncheckedColor = Color.LightGray,

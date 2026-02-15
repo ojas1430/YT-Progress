@@ -26,17 +26,15 @@ fun ReviseButton(
     isRevised: Boolean,
     onToggle: (Boolean) -> Unit
 ) {
-    var revised by remember { mutableStateOf(isRevised) }
 
-    // 🎨 Smooth animated gradient based on toggle state
-    val gradient = if (revised) {
+    val gradient = if (isRevised) {
         Brush.linearGradient(listOf(Color(0xFF43CEA2), Color(0xFF185A9D))) // green-blue gradient
     } else {
         Brush.linearGradient(listOf(Color(0xFFa770ef), Color(0xFFcf8bf3))) // purple gradient
     }
 
     val iconColor by animateColorAsState(
-        if (revised) Color.White else Color.White,
+        if (isRevised) Color.White else Color.White,
         label = "iconColor"
     )
 
@@ -48,8 +46,7 @@ fun ReviseButton(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) {
-                revised = !revised
-                onToggle(revised)
+                onToggle(!isRevised)
             }
     ) {
         Box(
@@ -60,7 +57,7 @@ fun ReviseButton(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = if (revised) Icons.Default.Check else Icons.Default.Refresh,
+                imageVector = if (isRevised) Icons.Default.Check else Icons.Default.Refresh,
                 contentDescription = "Revision",
                 tint = iconColor,
                 modifier = Modifier.size(20.dp)
@@ -70,9 +67,9 @@ fun ReviseButton(
         Spacer(Modifier.height(6.dp))
 
         Text(
-            text = if (revised) "Revised" else "Revise",
+            text = if (isRevised) "Revised" else "Revise",
             style = MaterialTheme.typography.bodySmall,
-            color = if (revised) Color(0xFFB9FFC2) else Color.White
+            color = if (isRevised) Color(0xFFB9FFC2) else Color.White
         )
     }
 }
