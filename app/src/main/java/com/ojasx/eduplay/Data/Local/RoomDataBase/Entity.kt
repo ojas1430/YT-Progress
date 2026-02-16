@@ -14,3 +14,13 @@ data class PlaylistEntity(
     val needsRevision: Boolean = false,
     val isPinned: Boolean = false
 )
+
+// this is for sorting
+@Entity(tableName = "video_state")
+data class VideoStateEntity(
+    @PrimaryKey val videoId: String,
+    val isCompleted: Boolean = false,
+    val needsRevision: Boolean = false,
+    val isPinned: Boolean = false,
+    val note: String? = null
+)
