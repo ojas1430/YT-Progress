@@ -28,10 +28,13 @@ fun PlaylistScreen(
                 .fillMaxSize()
                 .statusBarsPadding()
         ) {
-                MyPlaylistBanner(
-                    selectedSort = selectedSort,
-                    onSortSelected = {selectedSort = it}
-                )
+            MyPlaylistBanner(
+                playlistviewModel,
+                selectedSort = selectedSort,
+                onSortSelected = { sort ->
+                    selectedSort = sort
+                }
+            )
 
             PagerButtons(
                 currentPage = playlistviewModel.currentPage.value,

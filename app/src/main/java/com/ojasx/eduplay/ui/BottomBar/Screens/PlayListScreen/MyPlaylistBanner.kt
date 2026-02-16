@@ -14,9 +14,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ojasx.eduplay.API.PlaylistViewModel
 import com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen.SortDropDownMenu.SortDropdownMenu
 @Composable
 fun MyPlaylistBanner(
+    playlistviewModel : PlaylistViewModel,
     selectedSort: String,
     onSortSelected: (String) -> Unit
 ) {
@@ -38,7 +40,10 @@ fun MyPlaylistBanner(
 
         SortDropdownMenu(
             selectedSort = selectedSort,
-            onSortSelected = onSortSelected
+            onSortSelected = { sort ->
+                onSortSelected(sort)
+                playlistviewModel.applySort(sort)
+            }
         )
     }
 }
