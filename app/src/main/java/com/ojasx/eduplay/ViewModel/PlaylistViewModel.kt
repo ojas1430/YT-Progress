@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.ojasx.eduplay.BuildConfig
 import com.ojasx.eduplay.Data.Local.RoomDataBase.AppDatabase
+import com.ojasx.eduplay.Data.Local.RoomDataBase.VideoStateEntity
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(application: Application) : AndroidViewModel(application) {
@@ -18,7 +19,10 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         application,
         AppDatabase::class.java,
         "playlist_db"
-    ).build()
+    ).fallbackToDestructiveMigration()
+        .build()
+
+    private val videoStateDao = db.videoStateDao()
 
     private val completedMap = mutableStateMapOf<String, Boolean>()
     private val repository = YouTubeRepository(db.playlistDao())
@@ -37,6 +41,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
 
     init {
         loadCachedVideos()
+        loadVideoStates()
     }
 
 
@@ -124,6 +129,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                 it.copy(isCompleted = completed)
             } else it
         }
+        upsertVideoState(videoId, isCompleted = completed)
     }
 
     fun updatePinned(videoId: String, pinned: Boolean) {
@@ -133,6 +139,81 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             } else it
         }
     }
+
+    fun updateRevise(videoId: String, revised: Boolean) {
+
+        playlistItems.value = playlistItems.value.map { item ->
+            if (item.snippet.resourceId?.videoId == videoId) {
+                item.copy(needsRevision = revised)
+            } else item
+        }
+    }
+
+    fun updateNote(videoId: String, note: String) {
+        playlistItems.value = playlistItems.value.map { item ->
+            if (item.snippet.resourceId?.videoId == videoId) {
+                item.copy(note = note)
+            } else item
+        }
+    }
+
+    private fun upsertVideoState(
+        videoId: String,
+        isCompleted: Boolean? = null,
+        needsRevision: Boolean? = null,
+        isPinned: Boolean? = null,
+        note: String? = null
+    ) {
+        viewModelScope.launch {
+            val state = VideoStateEntity(
+                videoId = videoId,
+                isCompleted = isCompleted ?: false,
+                needsRevision = needsRevision ?: false,
+                isPinned = isPinned ?: false,
+                note = note
+            )
+            videoStateDao.insert(state)
+        }
+    }
+
+    private fun loadVideoStates() {
+        viewModelScope.launch {
+            val states = videoStateDao.getAllStates()
+            val stateMap = states.associateBy { it.videoId }
+
+            playlistItems.value = playlistItems.value.map { item ->
+                val videoId = item.snippet.resourceId?.videoId
+                val state = stateMap[videoId]
+
+                if (state != null) {
+                    item.copy(
+                        isCompleted = state.isCompleted,
+                        isPinned = state.isPinned,
+                        needsRevision = state.needsRevision,
+                        note = state.note
+                    )
+                } else item
+            }
+        }
+    }
+
+
+    fun applySort(sort: String) {
+        playlistItems.value = when (sort) {
+
+            "Completed Watching" -> playlistItems.value
+                .sortedByDescending { it.isCompleted }
+
+            "Revise" -> playlistItems.value
+                .sortedByDescending { it.needsRevision }
+
+            "Pinned" -> playlistItems.value
+                .sortedByDescending { it.isPinned }
+
+            else -> playlistItems.value // Default
+        }
+    }
+
 
 
 }
