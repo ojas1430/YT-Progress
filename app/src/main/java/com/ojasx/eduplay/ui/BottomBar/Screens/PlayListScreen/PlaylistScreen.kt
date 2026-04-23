@@ -21,7 +21,10 @@ fun PlaylistScreen(
 
     var selectedSort by remember { mutableStateOf("Default") }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .statusBarsPadding()
+    ) {
         PlaylistSoftBlurBackground()
 
         Column(

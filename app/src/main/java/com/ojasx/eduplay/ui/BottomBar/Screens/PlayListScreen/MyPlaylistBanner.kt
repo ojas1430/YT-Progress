@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ojasx.eduplay.API.PlaylistViewModel
 import com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen.SortDropDownMenu.SortDropdownMenu
+
 @Composable
 fun MyPlaylistBanner(
     playlistviewModel : PlaylistViewModel,
@@ -29,8 +30,9 @@ fun MyPlaylistBanner(
 
         Text(
             text = "My Playlists ▶️",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
+            // Increased from titleMedium to headlineSmall for a larger, dynamic scale
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.SemiBold,
             color = Color.White
         )
 
