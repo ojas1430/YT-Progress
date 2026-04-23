@@ -1,4 +1,3 @@
-
 package com.ojasx.eduplay.API.VideoCard
 
 import androidx.compose.foundation.background
@@ -39,32 +38,25 @@ fun PlaylistItemCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp)
-            .shadow(10.dp, RoundedCornerShape(18.dp)),
+            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .shadow(6.dp, RoundedCornerShape(18.dp)),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF2A2A72)
+            containerColor = Color.White.copy(alpha = 0.2f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
             modifier = Modifier
-                .background(
-                    Brush.linearGradient(
-                        colors = listOf(
-                            Color(0x33FFFFFF),
-                            Color(0x22FFFFFF)
-                        )
-                    )
-                )
-                .padding(16.dp)
+                .background(Color.Transparent)
+                .padding(10.dp)
         ) {
 
             // --- Thumbnail ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
+                    .aspectRatio(16f / 9f)
                     .clip(RoundedCornerShape(16.dp))
             ) {
                 AsyncImage(
@@ -91,24 +83,24 @@ fun PlaylistItemCard(
             // --- Title ---
             Text(
                 text = item.snippet.title,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Normal,
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
             // --- Row: Checkbox + Notes + Revision + Pin ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
+                    .padding(horizontal = 6.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                // ✅ Checkbox
+                // Checkbox
                 CompletedCheckbox(
                     isChecked = item.isCompleted,
                     onCheckedChange = { checked ->
@@ -120,7 +112,7 @@ fun PlaylistItemCard(
                 )
 
 
-                // 📝 Notes
+                //  Notes
                 Notes(
                     noteText = item.note ?: "",
                     onNotesSave = { newNote ->
@@ -132,7 +124,7 @@ fun PlaylistItemCard(
                 )
 
 
-                // 🔁 Revision
+                // Revision
                 ReviseButton(
                     isRevised = item.needsRevision,
                     onToggle = { revised ->
@@ -143,7 +135,7 @@ fun PlaylistItemCard(
                     }
                 )
 
-                // 📌 Pin
+                //  Pin
                 PinButton(
                     isPin = item.isPinned,
                     onPinChanged = {checked ->

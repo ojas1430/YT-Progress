@@ -43,22 +43,7 @@ fun LoginPage(navController: NavController, authViewModel: AuthViewModel) {
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Short header (no fixed screen-percentage height)
-        item {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Black, RoundedCornerShape(18.dp))
-                    .padding(vertical = 12.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.adduser),
-                    contentDescription = null,
-                    modifier = Modifier.size(52.dp)
-                )
-            }
-        }
+
 
         // Main content (scrolls on small screens)
         item {

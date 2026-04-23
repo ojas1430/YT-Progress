@@ -39,7 +39,7 @@ fun Notes(
     ) {
         Box(
             modifier = Modifier
-                .size(36.dp)
+                .size(34.dp)
                 .background(
                     brush = Brush.linearGradient(
                         listOf(Color(0xFFcf8bf3), Color(0xFFfdb99b))
@@ -52,7 +52,7 @@ fun Notes(
                 imageVector = Icons.Default.Add,
                 contentDescription = "Notes",
                 tint = Color.White,
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.size(16.dp)
                     .clickable(
                         onClick = {
                             showDialog = true

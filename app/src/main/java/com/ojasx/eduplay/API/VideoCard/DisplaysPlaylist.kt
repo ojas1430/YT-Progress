@@ -2,53 +2,33 @@
 package com.ojasx.eduplay.API.VideoCard
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import com.ojasx.eduplay.API.PlaylistItem
 import com.ojasx.eduplay.API.PlaylistViewModel
 
 @Composable
 fun LinkPlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
 
-    val playlistItems by remember { derivedStateOf { viewModel.playlistItems.value } }
-
-    // Sort pinned videos on top
-    val currentPage by viewModel.currentPage
+    val playlistItems = viewModel.playlistItems.value
     val listState = rememberLazyListState()
-
-    var selectedSort by remember { mutableStateOf("Default") }
-
-    // Sort logic
-    val sortedList = remember(playlistItems, selectedSort) {
-        when (selectedSort) {
-            "Completed Watching" -> playlistItems.sortedByDescending { it.isCompleted }
-            "Revise" -> playlistItems.sortedByDescending { it.needsRevision }
-            "Pinned" -> playlistItems.sortedByDescending { it.isPinned }
-            else -> playlistItems
-        }
-    }
+    val currentPage by viewModel.currentPage
 
     LaunchedEffect(currentPage) {
-        if (sortedList.isNotEmpty()) {
+        if (playlistItems.isNotEmpty()) {
             listState.animateScrollToItem(0)
         }
     }
 
-    LazyColumn(state = listState) {
-        items(sortedList) { item ->
+    LazyColumn(
+        state = listState,
+        contentPadding = PaddingValues(horizontal = 0.dp, vertical = 6.dp)
+    ) {
+        items(playlistItems) { item ->
 
             PlaylistItemCard(
                 viewModel,
@@ -67,9 +47,6 @@ fun LinkPlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
             )
 
 
-        }
-        item {
-            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }

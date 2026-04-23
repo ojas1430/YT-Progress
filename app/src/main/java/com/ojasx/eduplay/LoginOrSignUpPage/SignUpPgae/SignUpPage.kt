@@ -42,21 +42,7 @@ fun SignUpPage(navController: NavController, authViewModel: AuthViewModel) {
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        item {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Black, RoundedCornerShape(22.dp))
-                    .padding(vertical = 12.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.adduser),
-                    contentDescription = null,
-                    modifier = Modifier.size(52.dp)
-                )
-            }
-        }
+
 
         item {
             androidx.compose.foundation.layout.Column(

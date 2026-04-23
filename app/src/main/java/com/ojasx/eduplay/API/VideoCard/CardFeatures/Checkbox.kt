@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Modifier
 
 @Composable
 fun CompletedCheckbox(
@@ -21,6 +22,7 @@ fun CompletedCheckbox(
         Checkbox(
             checked = isChecked,
             onCheckedChange = onCheckedChange,
+            modifier = Modifier,
             colors = CheckboxDefaults.colors(
                 checkedColor = Color(0xFF4CAF50),
                 uncheckedColor = Color.LightGray,

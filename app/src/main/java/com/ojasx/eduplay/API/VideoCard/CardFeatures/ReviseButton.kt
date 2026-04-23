@@ -51,7 +51,7 @@ fun ReviseButton(
     ) {
         Box(
             modifier = Modifier
-                .size(40.dp)
+                .size(34.dp)
                 .shadow(6.dp, RoundedCornerShape(12.dp))
                 .background(brush = gradient, shape = RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center
@@ -60,7 +60,7 @@ fun ReviseButton(
                 imageVector = if (isRevised) Icons.Default.Check else Icons.Default.Refresh,
                 contentDescription = "Revision",
                 tint = iconColor,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(18.dp)
             )
         }
 

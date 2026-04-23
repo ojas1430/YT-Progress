@@ -24,7 +24,7 @@ fun PagerButtons(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp),
+            .padding(vertical = 2.dp),
         contentAlignment = Alignment.Center
     ) {
         Row(
@@ -36,7 +36,7 @@ fun PagerButtons(
                 if (currentPage > 1) onPageChange(currentPage - 1)
             }
 
-            Spacer(Modifier.width(8.dp))
+            Spacer(Modifier.width(6.dp))
 
             // Number buttons (1 ... totalPages)
             val pagesToShow = buildList {
@@ -52,7 +52,7 @@ fun PagerButtons(
             pagesToShow.forEach { page ->
                 Spacer(Modifier.width(4.dp))
                 when (page) {
-                    -1 -> Text("...", color = Color.White, fontSize = 16.sp)
+                    -1 -> Text("...", color = Color.White, fontSize = 14.sp)
                     else -> PageButton(
                         text = page.toString(),
                         selected = page == currentPage
@@ -60,7 +60,7 @@ fun PagerButtons(
                 }
             }
 
-            Spacer(Modifier.width(8.dp))
+            Spacer(Modifier.width(6.dp))
 
             // ▶️ Next
             PageButton(">", enabled = currentPage < totalPages) {
@@ -89,7 +89,7 @@ fun PageButton(
 
     Box(
         modifier = Modifier
-            .size(30.dp)
+            .size(26.dp)
             .border(1.dp, borderColor, RoundedCornerShape(8.dp))
             .background(bgColor, RoundedCornerShape(8.dp))
             .clickable(enabled = enabled) { onClick() },
@@ -99,7 +99,7 @@ fun PageButton(
             text = text,
             color = if (enabled) Color.White else Color.White,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-            fontSize = 15.sp
+            fontSize = 13.sp
         )
     }
 }

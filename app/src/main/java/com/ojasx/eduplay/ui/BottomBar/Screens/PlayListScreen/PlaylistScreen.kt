@@ -28,7 +28,6 @@ fun PlaylistScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .padding(bottom = 80.dp)
         ) {
             MyPlaylistBanner(
                 playlistviewModel,

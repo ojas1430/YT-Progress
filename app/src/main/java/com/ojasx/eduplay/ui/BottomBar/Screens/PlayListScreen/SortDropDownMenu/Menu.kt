@@ -29,7 +29,8 @@ fun SortDropdownMenu(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier
+            .padding(start = 8.dp)
     ) {
 
         OutlinedTextField(
@@ -53,14 +54,14 @@ fun SortDropdownMenu(
             modifier = Modifier
                 .menuAnchor()
                 .background(purple, RoundedCornerShape(8.dp))
-                .width(180.dp)
+                .widthIn(min = 130.dp, max = 160.dp)
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .width(180.dp)
+                .widthIn(min = 130.dp, max = 160.dp)
                 .shadow(12.dp, RoundedCornerShape(12.dp))
                 .background(Color.White, RoundedCornerShape(12.dp))
         ) {

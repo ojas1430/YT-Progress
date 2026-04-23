@@ -29,9 +29,11 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
     private val completedMap = mutableStateMapOf<String, Boolean>()
     private val repository = YouTubeRepository(db.playlistDao())
     var playlistLink = mutableStateOf("")
+    private var allPlaylistItems = emptyList<PlaylistItem>()
     var playlistItems = mutableStateOf<List<PlaylistItem>>(emptyList())
     var errorMessage = mutableStateOf<String?>(null)
     var isLoading = mutableStateOf(false)
+    private var currentSort: String = "Default"
 
     // Pagination state
     var currentPage = mutableStateOf(1)
@@ -72,12 +74,13 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                 return@launch
             }
 
-            playlistItems.value = response.items?.map { item ->
+            allPlaylistItems = response.items?.map { item ->
                 val videoId = item.snippet.resourceId?.videoId
                 item.copy(
                     isCompleted = completedMap[videoId] ?: false
                 )
             } ?: emptyList()
+            applySort(currentSort)
 
 
             nextPageToken = response.nextPageToken
@@ -118,7 +121,8 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             val cached = repository.getCachedVideos()
             if (cached.isNotEmpty()) {
-                playlistItems.value = cached.map { it.toPlaylistItem() }
+                allPlaylistItems = cached.map { it.toPlaylistItem() }
+                applySort(currentSort)
             }
         }
     }
@@ -126,39 +130,39 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
     fun updateCompleted(videoId: String, completed: Boolean) {
         completedMap[videoId] = completed
 
-        playlistItems.value = playlistItems.value.map {
-            if (it.snippet.resourceId?.videoId == videoId) {
-                it.copy(isCompleted = completed)
-            } else it
+        allPlaylistItems = allPlaylistItems.map {
+            if (it.snippet.resourceId?.videoId == videoId) it.copy(isCompleted = completed) else it
         }
+        applySort(currentSort)
         upsertVideoState(videoId, isCompleted = completed)
     }
 
     fun updatePinned(videoId: String, pinned: Boolean) {
-        playlistItems.value = playlistItems.value.map {
-            if (it.snippet.resourceId?.videoId == videoId) {
-                it.copy(isPinned = pinned)
-            } else it
+        allPlaylistItems = allPlaylistItems.map {
+            if (it.snippet.resourceId?.videoId == videoId) it.copy(isPinned = pinned) else it
         }
+        applySort(currentSort)
         upsertVideoState(videoId, isPinned = pinned)
     }
 
     fun updateRevise(videoId: String, revised: Boolean) {
 
-        playlistItems.value = playlistItems.value.map { item ->
+        allPlaylistItems = allPlaylistItems.map { item ->
             if (item.snippet.resourceId?.videoId == videoId) {
                 item.copy(needsRevision = revised)
             } else item
         }
+        applySort(currentSort)
         upsertVideoState(videoId, needsRevision = revised)
     }
 
     fun updateNote(videoId: String, note: String) {
-        playlistItems.value = playlistItems.value.map { item ->
+        allPlaylistItems = allPlaylistItems.map { item ->
             if (item.snippet.resourceId?.videoId == videoId) {
                 item.copy(note = note)
             } else item
         }
+        applySort(currentSort)
     }
 
     private fun upsertVideoState(
@@ -186,7 +190,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             val states = videoStateDao.getAllStates()
             val stateMap = states.associateBy { it.videoId }
 
-            playlistItems.value = playlistItems.value.map { item ->
+            allPlaylistItems = allPlaylistItems.map { item ->
                 val videoId = item.snippet.resourceId?.videoId
                 val state = stateMap[videoId]
 
@@ -199,23 +203,25 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                     )
                 } else item
             }
+            applySort(currentSort)
         }
     }
 
 
     fun applySort(sort: String) {
+        currentSort = sort
         playlistItems.value = when (sort) {
 
-            "Completed Watching" -> playlistItems.value
+            "Completed Watching" -> allPlaylistItems
                 .filter { it.isCompleted  }
 
-            "Revise" -> playlistItems.value
+            "Revise" -> allPlaylistItems
                 .filter { it.needsRevision}
 
-            "Pinned" -> playlistItems.value
+            "Pinned" -> allPlaylistItems
                 .filter { it.isPinned  }
 
-            else -> playlistItems.value
+            else -> allPlaylistItems
                 
         }
     }
