@@ -1,1 +1,33 @@
-/build
+# Built application files
+*.apk
+*.ap_
+*.aab
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+/build/
+/captures/
+/.externalNativeBuild/
+
+# Gradle files
+.gradle/
+**/build/
+
+# Local configuration
+local.properties
+.idea/
+*.iml
+
+# Keystore files
+*.jks
+
+# Google services
+google-services.json
+
+# Misc
+*.log

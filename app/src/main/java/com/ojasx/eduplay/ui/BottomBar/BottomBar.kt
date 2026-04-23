@@ -20,12 +20,14 @@ import com.ojasx.eduplay.ui.BottomBar.Screens.HomeScreen
 import com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen.PlaylistScreen
 import com.ojasx.eduplay.ui.BottomBar.Screens.SettingsScreen.SettingsScreen
 import com.ojasx.eduplay.ViewModel.ProfileViewModel
+import com.ojasx.eduplay.ViewModel.AuthViewModel
 import com.ojasx.eduplay.ui.Reusables.StatusBar
 
 @Composable
 fun BottomBar(
     playlistViewModel: PlaylistViewModel,
     profileViewModel: ProfileViewModel,
+    authViewModel: AuthViewModel,
     navController: NavController,
 ) {
     StatusBar()
@@ -105,6 +107,7 @@ fun BottomBar(
             navController = navController,
             playlistViewModel = playlistViewModel,
             profileViewModel = profileViewModel,
+            authViewModel = authViewModel,
             selectedIndex = selectedIndex,
         )
     }
@@ -116,12 +119,13 @@ fun ContentScreen(
     navController: NavController,
     playlistViewModel: PlaylistViewModel,
     profileViewModel: ProfileViewModel,
+    authViewModel: AuthViewModel,
     selectedIndex: Int = 0,
 ) {
     when (selectedIndex) {
         0 -> HomeScreen(navController, playlistViewModel)
         1 -> PlaylistScreen(playlistViewModel, navController)
-        2 -> SettingsScreen(navController,profileViewModel)
+        2 -> SettingsScreen(navController,profileViewModel, authViewModel)
     }
 }
 

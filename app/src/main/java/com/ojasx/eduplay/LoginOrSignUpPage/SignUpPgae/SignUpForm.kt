@@ -17,10 +17,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -42,18 +42,26 @@ fun SignUpForm(navController: NavController,authViewModel: AuthViewModel) {
     var password by remember { mutableStateOf("")  }
     var confirmPassword by remember { mutableStateOf("")  }
 
-    val _authState = authViewModel.authState.observeAsState()
+    val authState by authViewModel.authState.collectAsState(initial = AuthState.Loading)
     val context = LocalContext.current
 
     // if already logged in , directly go to home page
-    LaunchedEffect(_authState.value) {
-        when (_authState.value) {
+    LaunchedEffect(authState) {
+        when (authState) {
             is AuthState.Authenticated -> {
-                navController.navigate("Home")
+                navController.navigate("Home") {
+                    popUpTo("SignUpScreen") { inclusive = true }
+                }
+            }
+            is AuthState.EmailVerificationSent,
+            is AuthState.EmailNotVerified -> {
+                navController.navigate("VerifyEmailScreen") {
+                    popUpTo("SignUpScreen") { inclusive = true }
+                }
             }
             is AuthState.Error ->
                 Toast.makeText(context,
-                    (_authState.value as AuthState.Error).message ,
+                    (authState as AuthState.Error).message ,
                     Toast.LENGTH_SHORT).show()
             else -> Unit
         }
@@ -63,7 +71,7 @@ fun SignUpForm(navController: NavController,authViewModel: AuthViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(24.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ){
         //Name
 
@@ -185,7 +193,7 @@ fun SignUpForm(navController: NavController,authViewModel: AuthViewModel) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(top = 8.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Black,
                 contentColor = Color(0xFF87CEEB)

@@ -23,7 +23,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,9 +44,7 @@ fun profile(
     viewModel: ProfileViewModel
 ) {
     StatusBar()
-    val firstName by viewModel.firstname.observeAsState("")
-    val lastName by viewModel.lastname.observeAsState("")
-    val email by viewModel.email.observeAsState("")
+    val profileState by viewModel.profileState.collectAsState()
 
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -77,13 +75,13 @@ fun profile(
         Spacer(Modifier.width(12.dp))
         Column {
             Text(
-                "$firstName $lastName",
+                "${profileState.firstName} ${profileState.lastName}".trim(),
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
             Text(
-                email,
+                profileState.email,
                 color = Color.White.copy(alpha = 0.8f),
                 fontSize = 14.sp
             )

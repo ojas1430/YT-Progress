@@ -66,6 +66,10 @@ fun LinkPlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
                 isPinned = { pinned -> item.isPinned = pinned  }
             )
 
+
+        }
+        item {
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }

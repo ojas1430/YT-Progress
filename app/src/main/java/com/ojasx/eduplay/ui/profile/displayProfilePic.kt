@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -18,13 +18,13 @@ import com.ojasx.eduplay.R
 
 @Composable
 fun displayProfilePic(profileViewModel: ProfileViewModel) {
-    val profileUri by profileViewModel.profileImage.observeAsState()
+    val profileState by profileViewModel.profileState.collectAsState()
 
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val profileSize = (screenWidth * 0.18).dp
 
     val painter = rememberAsyncImagePainter(
-        model = profileUri ?: R.drawable.user
+        model = profileState.profileImageUri ?: R.drawable.user
     )
 
     Image(

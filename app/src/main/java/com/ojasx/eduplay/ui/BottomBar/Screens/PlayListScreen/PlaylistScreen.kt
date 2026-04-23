@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ojasx.eduplay.API.PlaylistViewModel
@@ -27,6 +28,7 @@ fun PlaylistScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
+                .padding(bottom = 80.dp)
         ) {
             MyPlaylistBanner(
                 playlistviewModel,
@@ -47,8 +49,6 @@ fun PlaylistScreen(
             // 🎥 All playlist videos
             LinkPlaylistScreen(playlistviewModel)
         }
-
-
 
     }
 }

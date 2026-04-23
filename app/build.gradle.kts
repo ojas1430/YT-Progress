@@ -82,6 +82,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
 
     // Google Sign-In
     implementation("com.google.android.gms:play-services-auth:20.7.0")
@@ -107,6 +108,7 @@ dependencies {
     // OkHttp logging
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.12")
     implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.test)
 
     // Testing dependencies
     testImplementation(libs.junit)

@@ -6,12 +6,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.ojasx.eduplay.ViewModel.AuthViewModel
 import com.ojasx.eduplay.ViewModel.ProfileViewModel
 import com.ojasx.eduplay.ui.theme.cardcolor
 
@@ -19,11 +21,21 @@ import com.ojasx.eduplay.ui.theme.cardcolor
 @Composable
 fun UserProfileScreen(
     navController: NavController,
-    profileviewModel: ProfileViewModel
+    profileviewModel: ProfileViewModel,
+    authViewModel: AuthViewModel
 ) {
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
+    val profileState by profileviewModel.profileState.collectAsState()
+
+    var firstName by remember { mutableStateOf(profileState.firstName) }
+    var lastName by remember { mutableStateOf(profileState.lastName) }
+    var email by remember { mutableStateOf(profileState.email) }
+
+    LaunchedEffect(profileState) {
+        // Keep fields in sync when profile updates elsewhere
+        firstName = profileState.firstName
+        lastName = profileState.lastName
+        email = profileState.email
+    }
 
     Box(
         modifier = Modifier
@@ -152,7 +164,12 @@ fun UserProfileScreen(
 
                 // Logout button
                 Button(
-                    onClick = { },
+                    onClick = {
+                        authViewModel.signOut()
+                        navController.navigate("LoginScreen") {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE53935)),
                     modifier = Modifier.fillMaxWidth()
                 ) {

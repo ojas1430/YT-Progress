@@ -2,6 +2,7 @@
 package com.ojasx.eduplay.API
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
@@ -21,6 +22,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         "playlist_db"
     ).fallbackToDestructiveMigration()
         .build()
+
 
     private val videoStateDao = db.videoStateDao()
 
@@ -138,6 +140,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                 it.copy(isPinned = pinned)
             } else it
         }
+        upsertVideoState(videoId, isPinned = pinned)
     }
 
     fun updateRevise(videoId: String, revised: Boolean) {
@@ -147,6 +150,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                 item.copy(needsRevision = revised)
             } else item
         }
+        upsertVideoState(videoId, needsRevision = revised)
     }
 
     fun updateNote(videoId: String, note: String) {
@@ -173,6 +177,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                 note = note
             )
             videoStateDao.insert(state)
+
         }
     }
 
@@ -202,18 +207,16 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         playlistItems.value = when (sort) {
 
             "Completed Watching" -> playlistItems.value
-                .sortedByDescending { it.isCompleted }
+                .filter { it.isCompleted  }
 
             "Revise" -> playlistItems.value
-                .sortedByDescending { it.needsRevision }
+                .filter { it.needsRevision}
 
             "Pinned" -> playlistItems.value
-                .sortedByDescending { it.isPinned }
+                .filter { it.isPinned  }
 
-            else -> playlistItems.value // Default
+            else -> playlistItems.value
+                
         }
     }
-
-
-
 }

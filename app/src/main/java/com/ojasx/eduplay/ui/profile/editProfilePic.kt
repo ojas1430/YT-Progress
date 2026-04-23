@@ -17,7 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,10 +31,10 @@ import com.ojasx.eduplay.ViewModel.ProfileViewModel
 @Composable
 fun ProfileImagePicker(viewModel: ProfileViewModel) {
 
-    val profileUri by viewModel.profileImage.observeAsState()
+    val profileState by viewModel.profileState.collectAsState()
     var tempUri by remember { mutableStateOf<Uri?>(null) }
 
-    val finalUri = tempUri ?: profileUri?.let { Uri.parse(it) }
+    val finalUri = tempUri ?: profileState.profileImageUri?.let { Uri.parse(it) }
 
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val profileSize = (screenWidth * 0.18).dp
@@ -89,7 +89,7 @@ fun ProfileImagePicker(viewModel: ProfileViewModel) {
                 Spacer(modifier = Modifier.width(10.dp))
             }
 
-            if (profileUri != null) {
+            if (profileState.profileImageUri != null) {
                 Button(
                     onClick = {
                         viewModel.updateProfileImage(null)

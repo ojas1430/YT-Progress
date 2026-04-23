@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.ojasx.eduplay.API.PlaylistViewModel
 import com.ojasx.eduplay.ViewModel.ProfileViewModel
+import com.ojasx.eduplay.ViewModel.AuthViewModel
 import com.ojasx.eduplay.ui.BottomBar.BottomBar
 import com.ojasx.eduplay.ui.Reusables.StatusBar
 
@@ -15,7 +16,8 @@ import com.ojasx.eduplay.ui.Reusables.StatusBar
 fun HomePage(
     navController: NavController,
     playlistViewModel: PlaylistViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    authViewModel: AuthViewModel
     ) {
     StatusBar()
     Box(
@@ -26,6 +28,7 @@ fun HomePage(
         BottomBar(
             playlistViewModel,
             profileViewModel,
+            authViewModel,
             navController
             )
     }

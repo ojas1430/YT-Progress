@@ -3,6 +3,8 @@ package com.ojasx.eduplay.API
 import android.util.Log
 import com.ojasx.eduplay.Data.Local.RoomDataBase.PlaylistDao
 import com.ojasx.eduplay.Data.Local.RoomDataBase.PlaylistEntity
+import com.ojasx.eduplay.Data.Local.RoomDataBase.VideoStateDao
+import com.ojasx.eduplay.Data.Local.RoomDataBase.VideoStateEntity
 import retrofit2.await
 
 class YouTubeRepository(
@@ -24,9 +26,22 @@ class YouTubeRepository(
 
             // Save API data to Room if available
             response?.items?.let { items ->
-                val entities = items.mapNotNull { it.toEntity() }
-                dao?.insertAll(entities)
+
+                // 1️Load existing Room data
+                val localVideos = dao?.getAllVideos().orEmpty()
+                val localMap = localVideos.associateBy { it.videoId }
+
+                //  Merge API data with local user state
+                val mergedEntities = items.mapNotNull { item ->
+                    val videoId = item.snippet?.resourceId?.videoId
+                    val oldEntity = localMap[videoId]
+                    item.toEntity(oldEntity)   // 👈 PRESERVES notes, done, pinned
+                }
+
+                // Save merged data
+                dao?.insertAll(mergedEntities)
             }
+
 
             response
         } catch (e: Exception) {
@@ -49,5 +64,8 @@ class YouTubeRepository(
     suspend fun clearCache() {
         dao?.clearAll()
     }
+
+
+
 
 }

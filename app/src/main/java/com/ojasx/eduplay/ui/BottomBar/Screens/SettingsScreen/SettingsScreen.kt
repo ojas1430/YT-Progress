@@ -40,13 +40,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.navigation.NavController
+import com.ojasx.eduplay.ViewModel.AuthViewModel
 import com.ojasx.eduplay.ViewModel.ProfileViewModel
 import com.ojasx.eduplay.ui.profile.profile
 
 @Composable
 fun SettingsScreen(
     navController: NavController,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    authViewModel: AuthViewModel
     ) {
 
     Column(
@@ -108,6 +110,15 @@ fun SettingsScreen(
         SettingsItem("App version 1.0.0")
         SettingsItem("Privacy Policy")
         SettingsItem("Terms & Conditions")
+
+        // Account
+        SettingsSectionTitle("Account")
+        SettingsItem("Logout") {
+            authViewModel.signOut()
+            navController.navigate("LoginScreen") {
+                popUpTo(0) { inclusive = true }
+            }
+        }
 
         Spacer(Modifier.height(100.dp))
     }
