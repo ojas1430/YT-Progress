@@ -50,6 +50,7 @@ import com.ojasx.eduplay.Notifications.LocalNotifications.ShowLocalNotificationS
 import com.ojasx.eduplay.ViewModel.AuthState
 import com.ojasx.eduplay.ViewModel.AuthViewModel
 import com.ojasx.eduplay.ViewModel.ProfileViewModel
+import com.ojasx.eduplay.ui.Player.YouTubePlayerScreen
 import com.ojasx.eduplay.ui.Reusables.FeatureComingSoonScreen
 import com.ojasx.eduplay.ui.helpAndSupport.faq.FAQScreen
 import com.ojasx.eduplay.ui.profile.UserProfileScreen
@@ -65,6 +66,12 @@ fun AppNavigation() {
         navController = navController,
         startDestination ="AuthGate"
     ) {
+
+        composable("player/{videoId}") { backStackEntry ->
+            val videoId = backStackEntry.arguments?.getString("videoId") ?: ""
+            YouTubePlayerScreen(videoId = videoId)
+        }
+
         composable("AuthGate") {
             val authState by authViewModel.authState.collectAsState(initial = AuthState.Loading)
             LaunchedEffect(authState) {

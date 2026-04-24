@@ -49,7 +49,10 @@ fun PlaylistScreen(
             )
 
             // 🎥 All playlist videos
-            LinkPlaylistScreen(playlistviewModel)
+            LinkPlaylistScreen(
+                playlistviewModel,
+                navController
+                )
         }
 
     }

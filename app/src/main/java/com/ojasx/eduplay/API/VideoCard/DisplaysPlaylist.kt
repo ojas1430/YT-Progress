@@ -9,10 +9,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.ojasx.eduplay.API.PlaylistViewModel
 
 @Composable
-fun LinkPlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
+fun LinkPlaylistScreen(
+    viewModel: PlaylistViewModel = viewModel(),
+    navController: NavController
+) {
 
     val playlistItems = viewModel.playlistItems.value
     val listState = rememberLazyListState()
@@ -35,6 +39,9 @@ fun LinkPlaylistScreen(viewModel: PlaylistViewModel = viewModel()) {
                 item = item,
                 onCheckedChange = { checked ->
                     item.isCompleted = checked
+                },
+                onVideoClick = { videoId ->
+                    navController.navigate("player/$videoId")
                 },
                 onNotesClick = {
                     // Open notes dialog / bottom sheet here

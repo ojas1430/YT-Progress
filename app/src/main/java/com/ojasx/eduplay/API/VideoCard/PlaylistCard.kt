@@ -1,6 +1,7 @@
 package com.ojasx.eduplay.API.VideoCard
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -26,6 +27,7 @@ import com.ojasx.eduplay.API.VideoCard.CardFeatures.ReviseButton
 fun PlaylistItemCard(
     playlistviewModel: PlaylistViewModel,
     item: PlaylistItem,
+    onVideoClick: (String)->Unit,
     onCheckedChange: (Boolean) -> Unit,
     onNotesClick: (String) -> Unit,
     onRevisionClick: (Boolean) -> Unit,
@@ -39,7 +41,10 @@ fun PlaylistItemCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp, vertical = 5.dp)
-            .shadow(6.dp, RoundedCornerShape(18.dp)),
+            .shadow(6.dp, RoundedCornerShape(18.dp))
+            .clickable{
+                onVideoClick(videoId)
+            },
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White.copy(alpha = 0.2f)
