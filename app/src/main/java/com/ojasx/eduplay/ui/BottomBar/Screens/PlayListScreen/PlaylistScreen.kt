@@ -51,7 +51,8 @@ fun PlaylistScreen(
             // 🎥 All playlist videos
             LinkPlaylistScreen(
                 playlistviewModel,
-                navController
+                navController,
+                selectedSort = selectedSort
                 )
         }
 
