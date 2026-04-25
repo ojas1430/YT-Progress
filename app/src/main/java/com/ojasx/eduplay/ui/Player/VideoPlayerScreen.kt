@@ -2,6 +2,10 @@ package com.ojasx.eduplay.ui.Player
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,9 +21,58 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
+
+// ─── Network State Flow ───────────────────────────────────────────────────────
+
+fun networkStateFlow(context: Context): Flow<Boolean> = callbackFlow {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    // Emit current state immediately
+    trySend(isInternetAvailable(connectivityManager))
+
+    val callback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            trySend(true) // Internet came back
+        }
+        override fun onLost(network: Network) {
+            trySend(false) // Internet lost
+        }
+        override fun onCapabilitiesChanged(
+            network: Network,
+            networkCapabilities: NetworkCapabilities
+        ) {
+            val hasInternet = networkCapabilities
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            trySend(hasInternet)
+        }
+    }
+
+    val request = NetworkRequest.Builder()
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        .build()
+
+    connectivityManager.registerNetworkCallback(request, callback)
+
+    awaitClose {
+        connectivityManager.unregisterNetworkCallback(callback)
+    }
+}.distinctUntilChanged() // Only emit when state actually changes
+
+fun isInternetAvailable(connectivityManager: ConnectivityManager): Boolean {
+    val network = connectivityManager.activeNetwork ?: return false
+    val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+    return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+}
+
+// ─── oEmbed Pre-Check ─────────────────────────────────────────────────────────
 
 suspend fun isVideoEmbeddable(videoId: String): Boolean {
     return withContext(Dispatchers.IO) {
@@ -31,13 +84,14 @@ suspend fun isVideoEmbeddable(videoId: String): Boolean {
             connection.readTimeout = 5000
             val responseCode = connection.responseCode
             connection.disconnect()
-            // 200 = embeddable, 401/403 = restricted
             responseCode == 200
         } catch (e: Exception) {
-            false // Treat any error as restricted
+            false
         }
     }
 }
+
+// ─── Open in YouTube ─────────────────────────────────────────────────────────
 
 fun openInYouTube(context: Context, videoId: String) {
     val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$videoId")).apply {
@@ -54,57 +108,85 @@ fun openInYouTube(context: Context, videoId: String) {
     }
 }
 
+// ─── Main Composable ──────────────────────────────────────────────────────────
+
 @Composable
 fun YouTubePlayerScreen(videoId: String) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
-    // null = still checking, true = embeddable, false = restricted
+    // Track internet state
+    val isOnline by networkStateFlow(context)
+        .collectAsState(initial = false)
+
+    // null = checking, true = embeddable, false = restricted
     var isEmbeddable by remember { mutableStateOf<Boolean?>(null) }
 
-    // Pre-check BEFORE rendering the player
-    LaunchedEffect(videoId) {
-        val result = isVideoEmbeddable(videoId)
-        if (!result) {
-            // Restricted — open YouTube immediately, don't load player at all
-            openInYouTube(context, videoId)
+    // Re-run the embeddability check every time internet comes back
+    LaunchedEffect(videoId, isOnline) {
+        if (isOnline) {
+            isEmbeddable = null // Show loader while re-checking
+            val result = isVideoEmbeddable(videoId)
+            if (!result) {
+                openInYouTube(context, videoId)
+            }
+            isEmbeddable = result
+        } else {
+            isEmbeddable = null // Lost internet — reset state
         }
-        isEmbeddable = result
     }
 
-    when (isEmbeddable) {
-        null -> {
-            // Still checking — show loader
+    when {
+        !isOnline && isEmbeddable == null -> {
+            // No internet — show offline message
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                NoInternetView() // 👇 see below
+            }
+        }
+        isEmbeddable == null -> {
+            // Checking embeddability
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
-        false -> {
-            // Restricted — already opened YouTube above, show nothing
+        isEmbeddable == false -> {
+            // Restricted — already opened YouTube
             Box(modifier = Modifier.fillMaxSize())
         }
-        true -> {
-            // Safe to play in-app
-            AndroidView(
-                modifier = Modifier.fillMaxSize(),
-                factory = { ctx ->
-                    val playerView = YouTubePlayerView(ctx)
-                    lifecycleOwner.lifecycle.addObserver(playerView)
-                    playerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                        override fun onReady(youTubePlayer: YouTubePlayer) {
-                            youTubePlayer.cueVideo(videoId, 0f)
-                        }
-                        override fun onError(
-                            youTubePlayer: YouTubePlayer,
-                            error: PlayerConstants.PlayerError
-                        ) {
-                            // Safety net in case something slips through
-                            openInYouTube(context, videoId)
-                        }
-                    })
-                    playerView
-                }
-            )
+        else -> {
+            // Play in app
+            key(isOnline) { // 🔑 Forces full recomposition when internet toggles
+                AndroidView(
+                    modifier = Modifier.fillMaxSize(),
+                    factory = { ctx ->
+                        val playerView = YouTubePlayerView(ctx)
+                        lifecycleOwner.lifecycle.addObserver(playerView)
+                        playerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                            override fun onReady(youTubePlayer: YouTubePlayer) {
+                                youTubePlayer.cueVideo(videoId, 0f)
+                            }
+                            override fun onError(
+                                youTubePlayer: YouTubePlayer,
+                                error: PlayerConstants.PlayerError
+                            ) {
+                                openInYouTube(context, videoId)
+                            }
+                        })
+                        playerView
+                    }
+                )
+            }
         }
     }
+}
+
+// ─── No Internet UI ───────────────────────────────────────────────────────────
+
+@Composable
+fun NoInternetView() {
+    androidx.compose.material3.Text(
+        text = "📶 No internet connection.\nVideo will reload automatically when connected.",
+        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+        style = androidx.compose.material3.MaterialTheme.typography.bodyLarge
+    )
 }

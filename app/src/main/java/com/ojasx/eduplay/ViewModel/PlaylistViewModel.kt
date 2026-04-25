@@ -2,15 +2,15 @@
 package com.ojasx.eduplay.API
 
 import android.app.Application
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.ojasx.eduplay.BuildConfig
+import com.ojasx.eduplay.Data.Local.Preferences.PlaylistPreferences
 import com.ojasx.eduplay.Data.Local.RoomDataBase.AppDatabase
 import com.ojasx.eduplay.Data.Local.RoomDataBase.VideoStateEntity
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(application: Application) : AndroidViewModel(application) {
@@ -23,13 +23,13 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
     ).fallbackToDestructiveMigration()
         .build()
 
-
     private val videoStateDao = db.videoStateDao()
+    private val preferences = PlaylistPreferences(application.applicationContext)
 
-    private val completedMap = mutableStateMapOf<String, Boolean>()
     private val repository = YouTubeRepository(db.playlistDao())
     var playlistLink = mutableStateOf("")
     private var allPlaylistItems = emptyList<PlaylistItem>()
+    private var stateMap = emptyMap<String, VideoStateEntity>()
     var playlistItems = mutableStateOf<List<PlaylistItem>>(emptyList())
     var errorMessage = mutableStateOf<String?>(null)
     var isLoading = mutableStateOf(false)
@@ -46,6 +46,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
     init {
         loadCachedVideos()
         loadVideoStates()
+        restoreLastPlaylistAndRefresh()
     }
 
 
@@ -74,12 +75,10 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                 return@launch
             }
 
-            allPlaylistItems = response.items?.map { item ->
-                val videoId = item.snippet.resourceId?.videoId
-                item.copy(
-                    isCompleted = completedMap[videoId] ?: false
-                )
-            } ?: emptyList()
+            preferences.saveLastPlaylistId(id)
+            allPlaylistItems = response.items
+                ?.map { item -> applyStateToItem(item, stateMap[item.snippet.resourceId?.videoId]) }
+                ?: emptyList()
             applySort(currentSort)
 
 
@@ -121,15 +120,26 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             val cached = repository.getCachedVideos()
             if (cached.isNotEmpty()) {
-                allPlaylistItems = cached.map { it.toPlaylistItem() }
+                allPlaylistItems = cached
+                    .map { it.toPlaylistItem() }
+                    .map { item -> applyStateToItem(item, stateMap[item.snippet.resourceId?.videoId]) }
                 applySort(currentSort)
             }
         }
     }
 
-    fun updateCompleted(videoId: String, completed: Boolean) {
-        completedMap[videoId] = completed
+    private fun restoreLastPlaylistAndRefresh() {
+        viewModelScope.launch {
+            val cachedPlaylistId = preferences.lastPlaylistIdFlow.firstOrNull()
+            if (cachedPlaylistId.isNullOrBlank()) return@launch
 
+            playlistId = cachedPlaylistId
+            playlistLink.value = cachedPlaylistId
+            fetchPlaylistVideos(initial = false)
+        }
+    }
+
+    fun updateCompleted(videoId: String, completed: Boolean) {
         allPlaylistItems = allPlaylistItems.map {
             if (it.snippet.resourceId?.videoId == videoId) it.copy(isCompleted = completed) else it
         }
@@ -163,6 +173,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             } else item
         }
         applySort(currentSort)
+        upsertVideoState(videoId, note = note)
     }
 
     private fun upsertVideoState(
@@ -173,38 +184,38 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         note: String? = null
     ) {
         viewModelScope.launch {
+            val existing = videoStateDao.getState(videoId)
             val state = VideoStateEntity(
                 videoId = videoId,
-                isCompleted = isCompleted ?: false,
-                needsRevision = needsRevision ?: false,
-                isPinned = isPinned ?: false,
-                note = note
+                isCompleted = isCompleted ?: existing?.isCompleted ?: false,
+                needsRevision = needsRevision ?: existing?.needsRevision ?: false,
+                isPinned = isPinned ?: existing?.isPinned ?: false,
+                note = note ?: existing?.note
             )
             videoStateDao.insert(state)
-
+            stateMap = stateMap + (videoId to state)
         }
     }
 
     private fun loadVideoStates() {
         viewModelScope.launch {
             val states = videoStateDao.getAllStates()
-            val stateMap = states.associateBy { it.videoId }
-
+            stateMap = states.associateBy { it.videoId }
             allPlaylistItems = allPlaylistItems.map { item ->
-                val videoId = item.snippet.resourceId?.videoId
-                val state = stateMap[videoId]
-
-                if (state != null) {
-                    item.copy(
-                        isCompleted = state.isCompleted,
-                        isPinned = state.isPinned,
-                        needsRevision = state.needsRevision,
-                        note = state.note
-                    )
-                } else item
+                applyStateToItem(item, stateMap[item.snippet.resourceId?.videoId])
             }
             applySort(currentSort)
         }
+    }
+
+    private fun applyStateToItem(item: PlaylistItem, state: VideoStateEntity?): PlaylistItem {
+        if (state == null) return item
+        return item.copy(
+            isCompleted = state.isCompleted,
+            isPinned = state.isPinned,
+            needsRevision = state.needsRevision,
+            note = state.note
+        )
     }
 
 

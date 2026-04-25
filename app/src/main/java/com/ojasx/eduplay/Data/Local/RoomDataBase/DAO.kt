@@ -39,6 +39,9 @@
         @Query("SELECT * FROM video_state")
         suspend fun getAllStates(): List<VideoStateEntity>
 
+        @Query("SELECT * FROM video_state WHERE videoId = :videoId LIMIT 1")
+        suspend fun getState(videoId: String): VideoStateEntity?
+
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         suspend fun insert(state: VideoStateEntity)
 
