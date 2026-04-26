@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.android.gms.auth.api.identity.Identity
 import com.ojasx.eduplay.API.PlaylistViewModel
 import com.ojasx.eduplay.ui.Navigation.AppNavigation
@@ -12,10 +13,12 @@ import com.ojasx.eduplay.ui.Navigation.AppNavigation
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
         val oneTapClient = Identity.getSignInClient(applicationContext)
         val viewModel: PlaylistViewModel
+
 
         enableEdgeToEdge()
 

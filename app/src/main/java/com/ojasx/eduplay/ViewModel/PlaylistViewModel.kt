@@ -223,6 +223,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         currentSort = sort
         playlistItems.value = when (sort) {
 
+            "Completed",
             "Completed Watching" -> allPlaylistItems
                 .filter { it.isCompleted  }
 

@@ -1,4 +1,3 @@
-
 package com.ojasx.eduplay.API.VideoCard
 
 import androidx.compose.foundation.Image
@@ -90,9 +89,11 @@ private fun EmptyPlaylistCard(
     isLoading: Boolean,
     selectedSort: String
 ) {
+    val isCompletedSort = selectedSort == "Completed" || selectedSort == "Completed Watching"
+
     val title = when {
         isLoading -> "Fetching videos..."
-        selectedSort == "Completed Watching" -> "No completed videos yet"
+        isCompletedSort -> "No completed videos yet"
         selectedSort == "Revise" -> "Nothing marked for revision"
         selectedSort == "Pinned" -> "No pinned videos yet"
         else -> "No videos to show"
@@ -100,7 +101,7 @@ private fun EmptyPlaylistCard(
 
     val subtitle = when {
         isLoading -> "Please wait while your playlist is loading."
-        selectedSort == "Completed Watching" -> "Mark videos as completed to see them here."
+        isCompletedSort -> "Mark videos as completed to see them here."
         selectedSort == "Revise" -> "Tap Revise on any card to build your revision list."
         selectedSort == "Pinned" -> "Pin videos to keep important ones in this tab."
         else -> "Fetch a playlist from Home to start tracking."

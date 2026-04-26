@@ -52,6 +52,7 @@ import com.ojasx.eduplay.ViewModel.AuthViewModel
 import com.ojasx.eduplay.ViewModel.ProfileViewModel
 import com.ojasx.eduplay.ui.Player.YouTubePlayerScreen
 import com.ojasx.eduplay.ui.Reusables.FeatureComingSoonScreen
+import com.ojasx.eduplay.ui.SplashScreen
 import com.ojasx.eduplay.ui.helpAndSupport.faq.FAQScreen
 import com.ojasx.eduplay.ui.profile.UserProfileScreen
 
@@ -64,7 +65,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination ="AuthGate"
+        startDestination ="SplashScreen"
     ) {
 
         composable("player/{videoId}") { backStackEntry ->
@@ -219,6 +220,9 @@ fun AppNavigation() {
         }
         composable("FAQScreen"){
             FAQScreen(navController)
+        }
+        composable("SplashScreen"){
+            SplashScreen(navController)
         }
     }
 }

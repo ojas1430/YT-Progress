@@ -44,9 +44,11 @@ fun SortDropdownMenu(
                     fontSize = 11.sp
                 )
             },
-            textStyle = TextStyle(fontSize = 13.sp), // Smaller text font
+            textStyle = TextStyle(fontSize = 13.sp),
             trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded)
+                CompositionLocalProvider(LocalContentColor provides Color.White) {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                }
             },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color(0xFFFDB99B),
