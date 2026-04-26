@@ -41,9 +41,9 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
     // Pagination state
     var currentPage = mutableStateOf(1)
     var totalPages = mutableStateOf(1)
-    private var nextPageToken: String? = null
-    private var prevPageToken: String? = null
-    private var pageTokens = mutableListOf<String?>(null)
+    // Stores token needed to load each page index.
+    // Example: pageTokens[1] = null, pageTokens[2] = token returned from page 1 response, etc.
+    private val pageTokens = mutableMapOf(1 to null as String?)
     private var playlistId: String? = null
 
     init {
@@ -56,12 +56,20 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
 
     fun fetchPlaylistVideos(
         initial: Boolean = true,
+        page: Int = 1,
         pageToken: String? = null
     ) {
         val id = if (initial) extractPlaylistId(playlistLink.value.trim()) else playlistId
         if (id.isNullOrEmpty()) {
             errorMessage.value = "Invalid playlist link"
             return
+        }
+
+        if (initial) {
+            currentPage.value = 1
+            totalPages.value = 1
+            pageTokens.clear()
+            pageTokens[1] = null
         }
 
         playlistId = id
@@ -85,30 +93,26 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             applySort(currentSort)
 
 
-            nextPageToken = response.nextPageToken
-            prevPageToken = response.prevPageToken
+            val resolvedPage = if (initial) 1 else page
 
-            // Save page tokens
-            if (pageTokens.size < currentPage.value + 1) {
-                pageTokens.add(nextPageToken)
+            // Save token for current page and upcoming page (if exists).
+            pageTokens[resolvedPage] = pageToken
+            response.nextPageToken?.let { nextToken ->
+                pageTokens[resolvedPage + 1] = nextToken
             }
 
-            // Estimate total pages if available (optional)
-            totalPages.value = pageTokens.filterNotNull().size + 1
+            currentPage.value = resolvedPage
+            val highestKnownPage = pageTokens.keys.maxOrNull() ?: 1
+            totalPages.value = if (response.nextPageToken != null) highestKnownPage else resolvedPage
         }
     }
 
     fun onPageChange(page: Int) {
-        if (page < 1) return
+        if (page < 1 || page == currentPage.value) return
+        if (!pageTokens.containsKey(page)) return
 
-        val token = when {
-            page > currentPage.value -> nextPageToken
-            page < currentPage.value -> prevPageToken
-            else -> null
-        }
-
-        currentPage.value = page
-        fetchPlaylistVideos(initial = false, pageToken = token)
+        val token = pageTokens[page]
+        fetchPlaylistVideos(initial = false, page = page, pageToken = token)
     }
 
     private fun extractPlaylistId(url: String): String? {
@@ -138,7 +142,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
 
             playlistId = cachedPlaylistId
             playlistLink.value = cachedPlaylistId
-            fetchPlaylistVideos(initial = false)
+            fetchPlaylistVideos(initial = false, page = 1, pageToken = null)
         }
     }
 
