@@ -2,6 +2,8 @@ package com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,12 +14,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ojasx.eduplay.API.PlaylistViewModel
 import com.ojasx.eduplay.API.VideoCard.LinkPlaylistScreen
+import com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen.Stats.StatsButton
 
 @Composable
 fun PlaylistScreen(
     playlistviewModel: PlaylistViewModel = viewModel(),
     navController: NavController,
 ) {
+
+
+
+    LaunchedEffect(Unit) {
+        playlistviewModel.loadStats()
+    }
 
     var selectedSort by remember { mutableStateOf("Default") }
 
@@ -40,13 +49,21 @@ fun PlaylistScreen(
                 }
             )
 
-            PagerButtons(
-                currentPage = playlistviewModel.currentPage.value,
-                totalPages = playlistviewModel.totalPages.value,
-                onPageChange = { page ->
-                    playlistviewModel.onPageChange(page)
-                }
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            ) {
+                StatsButton(playlistviewModel,navController)
+
+                PagerButtons(
+                    currentPage = playlistviewModel.currentPage.value,
+                    totalPages = playlistviewModel.totalPages.value,
+                    onPageChange = { page ->
+                        playlistviewModel.onPageChange(page)
+                    }
+                )
+            }
 
             // 🎥 All playlist videos
             LinkPlaylistScreen(

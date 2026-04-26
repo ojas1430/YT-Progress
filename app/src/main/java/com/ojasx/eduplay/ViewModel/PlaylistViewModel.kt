@@ -10,6 +10,8 @@ import com.ojasx.eduplay.BuildConfig
 import com.ojasx.eduplay.Data.Local.Preferences.PlaylistPreferences
 import com.ojasx.eduplay.Data.Local.RoomDataBase.AppDatabase
 import com.ojasx.eduplay.Data.Local.RoomDataBase.VideoStateEntity
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
@@ -24,6 +26,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         .build()
 
     private val videoStateDao = db.videoStateDao()
+    private val playlistDao = db.playlistDao()
     private val preferences = PlaylistPreferences(application.applicationContext)
 
     private val repository = YouTubeRepository(db.playlistDao())
@@ -144,6 +147,10 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             if (it.snippet.resourceId?.videoId == videoId) it.copy(isCompleted = completed) else it
         }
         applySort(currentSort)
+        viewModelScope.launch {
+            playlistDao.setCompleted(videoId, completed)
+            loadStats()
+        }
         upsertVideoState(videoId, isCompleted = completed)
     }
 
@@ -152,6 +159,10 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             if (it.snippet.resourceId?.videoId == videoId) it.copy(isPinned = pinned) else it
         }
         applySort(currentSort)
+        viewModelScope.launch {
+            playlistDao.setPinned(videoId, pinned)
+            loadStats()
+        }
         upsertVideoState(videoId, isPinned = pinned)
     }
 
@@ -163,6 +174,10 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             } else item
         }
         applySort(currentSort)
+        viewModelScope.launch {
+            playlistDao.setRevision(videoId, revised)
+            loadStats()
+        }
         upsertVideoState(videoId, needsRevision = revised)
     }
 
@@ -237,4 +252,30 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                 
         }
     }
+
+    //Stats
+    private val _totalVideos = MutableStateFlow(0)
+    val totalVideos: StateFlow<Int> = _totalVideos
+
+    private val _completedVideos = MutableStateFlow(0)
+    val completedVideos: StateFlow<Int> = _completedVideos
+
+    private val _pinnedVideos = MutableStateFlow(0)
+    val pinnedVideos: StateFlow<Int> = _pinnedVideos
+
+    private val _revisionVideos = MutableStateFlow(0)
+    val revisionVideos: StateFlow<Int> = _revisionVideos
+
+    fun loadStats() {
+        viewModelScope.launch {
+            _totalVideos.value = playlistDao.getTotalVideos()
+            _completedVideos.value = playlistDao.getCompletedCount()
+            _pinnedVideos.value = playlistDao.getPinnedCount()
+            _revisionVideos.value = playlistDao.getRevisionCount()
+        }
+    }
+
+
 }
+
+

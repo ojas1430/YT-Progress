@@ -50,6 +50,7 @@ import com.ojasx.eduplay.Notifications.LocalNotifications.ShowLocalNotificationS
 import com.ojasx.eduplay.ViewModel.AuthState
 import com.ojasx.eduplay.ViewModel.AuthViewModel
 import com.ojasx.eduplay.ViewModel.ProfileViewModel
+import com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen.Stats.StatsButton
 import com.ojasx.eduplay.ui.Player.YouTubePlayerScreen
 import com.ojasx.eduplay.ui.Reusables.FeatureComingSoonScreen
 import com.ojasx.eduplay.ui.SplashScreen
@@ -223,6 +224,9 @@ fun AppNavigation() {
         }
         composable("SplashScreen"){
             SplashScreen(navController)
+        }
+        composable("StatsButton"){
+            StatsButton(playlistviewModel,navController)
         }
     }
 }

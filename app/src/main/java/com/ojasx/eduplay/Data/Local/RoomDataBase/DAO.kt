@@ -30,6 +30,18 @@
         @Query("UPDATE playlist_videos SET needsRevision = :value WHERE videoId = :videoId")
         suspend fun setRevision(videoId: String, value: Boolean)
 
+        @Query("SELECT COUNT(*) FROM playlist_videos")
+        suspend fun getTotalVideos(): Int
+
+        @Query("SELECT COUNT(*) FROM playlist_videos WHERE isCompleted = 1")
+        suspend fun getCompletedCount(): Int
+
+        @Query("SELECT COUNT(*) FROM playlist_videos WHERE isPinned = 1")
+        suspend fun getPinnedCount(): Int
+
+        @Query("SELECT COUNT(*) FROM playlist_videos WHERE needsRevision = 1")
+        suspend fun getRevisionCount(): Int
+
 
     }
 
