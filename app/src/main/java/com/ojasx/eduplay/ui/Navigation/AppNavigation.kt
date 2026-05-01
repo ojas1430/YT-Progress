@@ -251,7 +251,7 @@ fun AppNavigation() {
             SignUpPage(navController, authViewModel)
         }
         composable("Home") {
-            HomePage(navController,playlistviewModel,profileViewModel,authViewModel)
+            HomePage(navController, playlistviewModel, profileViewModel, authViewModel)
         }
 
         composable("PlaylistScreen"){

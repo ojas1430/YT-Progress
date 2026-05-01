@@ -17,7 +17,7 @@ fun HomePage(
     navController: NavController,
     playlistViewModel: PlaylistViewModel,
     profileViewModel: ProfileViewModel,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
     ) {
     StatusBar()
     Box(
