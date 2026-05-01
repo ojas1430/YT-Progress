@@ -161,7 +161,9 @@ class AuthViewModel : ViewModel() {
         }
         auth.sendPasswordResetEmail(email.trim()).addOnCompleteListener { task ->
             _authState.value = if (task.isSuccessful) {
-                AuthState.PasswordResetEmailSent("Password reset email sent. Check your inbox.")
+                AuthState.PasswordResetEmailSent(
+                    "Password reset email sent. Check your inbox. It might be in your spam folder too, so please check there as well."
+                )
             } else {
                 AuthState.Error(task.exception?.message ?: "Failed to send password reset email")
             }

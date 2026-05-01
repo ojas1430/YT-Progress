@@ -110,13 +110,11 @@ dependencies {
 
     // OkHttp logging
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.12")
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.test)
-
     // Testing dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.ui.test)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
@@ -128,8 +126,6 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
-
-    implementation("androidx.core:core-ktx:1.12.0")
 
         implementation ("com.google.accompanist:accompanist-systemuicontroller:0.31.5-beta")
 

@@ -1,10 +1,16 @@
 
 package com.ojasx.eduplay.ui.Navigation
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,15 +27,19 @@ import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -52,6 +62,7 @@ import com.ojasx.eduplay.ViewModel.AuthViewModel
 import com.ojasx.eduplay.ViewModel.ProfileViewModel
 import com.ojasx.eduplay.ui.BottomBar.Screens.PlayListScreen.Stats.StatsButton
 import com.ojasx.eduplay.ui.Player.YouTubePlayerScreen
+import com.ojasx.eduplay.ui.Reusables.AdaptiveSystemBars
 import com.ojasx.eduplay.ui.Reusables.FeatureComingSoonScreen
 import com.ojasx.eduplay.ui.SplashScreen
 import com.ojasx.eduplay.ui.helpAndSupport.faq.FAQScreen
@@ -59,10 +70,55 @@ import com.ojasx.eduplay.ui.profile.UserProfileScreen
 
 @Composable
 fun AppNavigation() {
+    val context = LocalContext.current
     val navController = rememberNavController()
     val playlistviewModel : PlaylistViewModel = viewModel()
     val profileViewModel: ProfileViewModel = viewModel()
     val authViewModel: AuthViewModel = viewModel()
+    val isInternetAvailable by rememberInternetAvailability(context)
+    var showNoInternetDialog by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(isInternetAvailable) {
+        if (!isInternetAvailable) {
+            showNoInternetDialog = true
+        }
+    }
+
+    AdaptiveSystemBars(
+        statusBarColor = MaterialTheme.colorScheme.background,
+        navigationBarColor = MaterialTheme.colorScheme.surface
+    )
+
+    if (showNoInternetDialog && !isInternetAvailable) {
+        AlertDialog(
+            onDismissRequest = { showNoInternetDialog = false },
+            title = {
+                Text(
+                    text = "No Internet Connection",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    text = "Please connect to the internet and try again.",
+                    color = Color.Black.copy(alpha = 0.85f)
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = { showNoInternetDialog = false },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Black,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text("OK")
+                }
+            },
+            containerColor = Color.White
+        )
+    }
 
     NavHost(
         navController = navController,
@@ -229,4 +285,43 @@ fun AppNavigation() {
             StatsButton(playlistviewModel,navController)
         }
     }
+}
+
+@Composable
+private fun rememberInternetAvailability(context: Context) = produceState(
+    initialValue = isInternetAvailable(context),
+    key1 = context
+) {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val callback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            value = true
+        }
+
+        override fun onLost(network: Network) {
+            value = isInternetAvailable(context)
+        }
+
+        override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+            value = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        }
+    }
+
+    val request = NetworkRequest.Builder()
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        .build()
+    connectivityManager.registerNetworkCallback(request, callback)
+
+    awaitDispose {
+        connectivityManager.unregisterNetworkCallback(callback)
+    }
+}
+
+private fun isInternetAvailable(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val network = connectivityManager.activeNetwork ?: return false
+    val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+    return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
 }

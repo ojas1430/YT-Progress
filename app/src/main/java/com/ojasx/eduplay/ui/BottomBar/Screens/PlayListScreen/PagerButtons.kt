@@ -61,7 +61,7 @@ fun PagerButtons(
             }
 
             Spacer(Modifier.width(6.dp))
-
+2
             // ▶️ Next
             PageButton(">", enabled = currentPage < totalPages) {
                 if (currentPage < totalPages) onPageChange(currentPage + 1)
