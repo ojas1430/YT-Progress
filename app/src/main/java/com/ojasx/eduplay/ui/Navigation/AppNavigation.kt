@@ -196,7 +196,8 @@ fun AppNavigation() {
                     is AuthState.EmailVerificationSent -> (authState as AuthState.EmailVerificationSent).message
                     is AuthState.EmailNotVerified -> (authState as AuthState.EmailNotVerified).message
                     is AuthState.Error -> (authState as AuthState.Error).message
-                    else -> "We sent you a verification link. Open your email and click the link."
+                    else -> "We sent you a verification link. Open your email and click the link." +
+                            "(Check Spam folder)"
                 }
 
                 Text(

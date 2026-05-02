@@ -180,7 +180,24 @@ class AuthViewModel : ViewModel() {
         super.onCleared()
     }
 
+    fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = com.google.firebase.auth.GoogleAuthProvider
+            .getCredential(idToken, null)
 
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _authState.value = AuthState.Authenticated
+                } else {
+                    _authState.value =
+                        AuthState.Error(task.exception?.message ?: "Google sign-in failed")
+                }
+            }
+    }
+
+    fun setLoading() {
+        _authState.value = AuthState.Loading
+    }
 
 }
 

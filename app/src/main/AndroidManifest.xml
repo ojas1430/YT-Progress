@@ -11,6 +11,9 @@
 
     <!--  Permission to wake device for alarms (helps ensure alarms work when device is sleeping) -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove"/>
 
 
     <application
