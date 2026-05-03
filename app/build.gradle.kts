@@ -28,8 +28,8 @@ android {
         applicationId = "com.ojasx.eduplay"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 4
+        versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Use the loaded API key
         buildConfigField("String", "YOUTUBE_API_KEY", "\"$youtubeApiKey\"")

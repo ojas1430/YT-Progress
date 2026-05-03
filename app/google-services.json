@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "927162964914-gla9gkc2lfu0g5pg3hc3frulq96daq9k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ojasx.eduplay",
+            "certificate_hash": "14c33ca5aadd2c5056363381c88e4f2a5fb81d4c"
+          }
+        },
+        {
           "client_id": "927162964914-lkm802jcpdkoctfj03b7fljpf5038ski.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
